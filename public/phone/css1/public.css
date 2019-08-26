@@ -1,0 +1,163 @@
+*,
+::before,
+::after {
+	margin: 0;
+	padding: 0;
+	/*清除高亮效果*/
+	-webkit-tap-highlight-color: transparent;
+	/*移动端每个盒子都要设置为border-box*/
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+input {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 62.5%;
+	background: transparent;
+	font-family: "微软雅黑";
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+input {
+	border: none;
+	/*-webkit-appearance: none;*/
+	outline: none;
+}
+
+img {
+	border: none;
+}
+
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: normal;
+	font-size: 100%;
+}
+
+.clearfix::after {
+	content: "";
+	display: block;
+	line-height: 0;
+	height: 0;
+	clear: both;
+}
+
+@media only screen and (min-width: 481px) {
+	html {
+		font-size: 94%!important
+	}
+}
+
+@media only screen and (min-width: 561px) {
+	html {
+		font-size: 109%!important
+	}
+}
+
+@media only screen and (min-width: 641px) {
+	html {
+		font-size: 125%!important
+	}
+}
+
+
+/*@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 640px) {
+	select:focus,
+	textarea:focus,
+	input:focus {
+		font-size: 16px !important;
+	}
+}*/

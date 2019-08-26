@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+
+    <div id='integral_toolber' style=" padding:5px 0px 5px 5px">
+        <!-- <input id="integral_search" />
+        <div id="search_integral_tiaojian" style="width:120px">
+            <div data-options="name:'phone',iconCls:'icon-ok'">手机号</div>
+            <div data-options="name:'username',iconCls:'icon-ok'">用户名</div>
+            <div data-options="name:'username',iconCls:'icon-ok'">用户名</div>
+        </div> -->
+
+        <div style=" height:5px"></div>
+<!--         <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="add_member">新增</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-edit'" id="edit_member">修改</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" id="delete_member">删除</a> -->
+        手机号：<input class="easyui-textbox" data-options="" id="integral_phone" style="width:100px"> 
+        时间：<input  id="integral_date"  type="text" ></input>
+        <a id="btn_integral_search" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a> 
+    </div>
+
+    <table id='MemberIntegral'></table>
+    <script type="text/javascript">
+        $(function () {
+            $('#MemberIntegral').datagrid({
+                url: '__APP__/MemberIntegral/getData',
+                columns: [[
+                    { field: 'cbo_integral', checkbox: true },
+                    { field: 'id', title: 'ID', hidden: true },
+                    {
+                        field: 'username', title: '用户名', width: 150, align: 'center'
+                    },
+                    {
+                        field: 'phone', title: '手机号', width: 150, align: 'center'
+                    },
+                    {
+                        field: 'create_time', title: '时间', width: 150, align: 'center'
+                    },
+                    {
+                        field: 'integral', title: '额度', width: 100, align: 'center',
+                        formatter: function (value, row, index) {
+                            var a = "";
+                            if(row.type=="1")
+                            {
+                                a = "<span style='color:red'>"+value+"</span>"
+                            }
+                            else if(row.type=="0")
+                            {
+                                a = "<span style='color:green'>"+value+"</span>"
+                            }
+                            else
+                            {
+                                a = "<span style='color:black'>"+value+"</span>"
+                            }
+                            return a;
+                        }
+                    },
+                    {
+                        field: 'description', title: '描述', width: 300, align: 'center'
+                    },
+                    {
+                        field: 'source', title: '来源', width: 80, align: 'center'
+                    }
+                ]],
+                //斑马线
+                striped: true,
+                //底部分页
+                pagination: true,
+                //行号
+                rownumbers: true,
+                //只能选中一行
+                singleSelect: true,
+                //如果为true，单击复选框将永远选择行。如果为false，选择行将不选中复选框。
+                selectOnCheck: false,
+                //如果为true，当用户点击行的时候该复选框就会被选中或取消选中。如果为false，当用户仅在点击该复选框的时候才会呗选中或取消。
+                checkOnSelect: false,
+                //工具栏
+                toolbar: '#integral_toolber',
+                //是否显示行脚
+                showFooter: true
+            });
+            $('#integral_search').searchbox({
+                searcher: function (value, name) {
+                    //alert(value + "," + name)
+                    $('#MemberIntegral').datagrid('load', {
+                        parameterType: name,
+                        parameter: value
+                    });
+                },
+                menu: '#search_integral_tiaojian',
+                prompt: '请输入值',
+                width: 200
+            });
+            $('#integral_date').datebox({    
+                required:true   
+            });   
+            $('#btn_integral_search').click(function(){
+                var phone = $('#integral_phone').textbox('getValue');
+                var time = $('#integral_date').datebox('getValue');
+                $('#MemberIntegral').datagrid('reload',{
+                    time: time,
+                    phone:phone 
+                })
+            })
+        })
+    </script>
+</body>
+</html>

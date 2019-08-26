@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' 'self'  *.jythjc.com kefu.easemob.com;img-src 'self' data:;font-src 'self' data:;report-uri /error/csp.php" />
+<title>获取验证码</title>
+<link href="__ROOT__/public/phone/css/amazeui.min.css" rel="stylesheet" type="text/css" />
+<link href="__ROOT__/public/phone/css/demo.css" rel="stylesheet" type="text/css" />
+<link type="text/css" href="__ROOT__/public/phone/css/optstyle.css" rel="stylesheet" />
+<link type="text/css" href="__ROOT__/public/phone/css/style.css" rel="stylesheet" />
+<script type="text/javascript" src="__ROOT__/public/phone/js/jquery.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/phone/js/amazeui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/layer/layer.js"></script>
+<script type="text/javascript" src="__ROOT__/public/phone/js/mymall.js"></script>
+<script type="text/javascript">
+    $(function(){
+        MobileCode.phone_obj = $('#phone');
+        MobileCode.Timing_obj = $('#dyMobileButton');
+        MobileCode.verify_url = "ResetPwd.html";
+        $('#dyMobileButton').on('click',MobileCode.send);
+        $('.xyb').click(function(){
+        	MobileCode.code_obj = $('#code');
+        	MobileCode.verify();
+        });
+    })
+</script>
+</head>
+<body>
+<!-- header -->
+<include file="Public/header" />
+<!-- 内容 -->
+<div class="czdlmm">
+	<div class="shuruk yanzhengma">
+		<span class="yzmmy">手机号：</span>
+		<input class="srk" id="phone" style="width: 70%" placeholder="请输入您账号绑定的手机号">
+	</div>
+	<div class="shuruk yanzhengma">
+		<span class="yzmmy">验证码：</span>
+		<input class="srk" id="code" placeholder="请输入短信验证码">
+		<a class="btn" href="javascript:void(0);">
+            <input id="dyMobileButton" value="获取验证码" type="button">
+        </a>
+	</div>
+	<a class="xyb" href="javascript:void(0)">下一步</a>
+</div>         
+</body>
+</html>

@@ -1,0 +1,45 @@
+﻿<CTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <div id="div_ProductAttributes" align="center">
+        <input type="hidden" id="id_ProductAttributes" value="{$id}" />
+        <input type="hidden" id="Attributes_ProductAttributes" value="{$Attributes}" />
+        <textarea id="editor_ProductAttributes"></textarea>
+        <input type="hidden" id="hidden_editor_ProductAttributes" value='{$content}'>
+        <input type="button" id="save_ProductAttributes" value="保存" />
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            var editor_content = $('#hidden_editor_ProductAttributes').val();
+            KindEditor.remove('#editor_ProductAttributes');
+            $('#editor_ProductAttributes').val(editor_content);
+            createKindeditor("#editor_ProductAttributes");
+            $('#save_ProductAttributes').click(function () {
+                var content = $('#editor_ProductAttributes').val();
+                $.ajax({
+                    url: '__APP__/MallProduct/save_Attributes',
+                    data: { id: $('#id_ProductAttributes').val(),Attributes: $('#Attributes_ProductAttributes').val(),content: content },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    
+</body>
+</html>

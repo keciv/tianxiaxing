@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <style type="text/css">
+#table_content tr td:nth-child(1) {
+    width: 100px;
+    text-align: left; 
+}
+    </style>
+
+    <div id="div_Admin" >
+        <form id="form_Admin" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id_admin" value="{$id}" />
+            <input type="hidden" id="caozuo_admin" value="{$caozuo}" />
+            <table id="table_content" style="margin:10px;">
+                <tr>
+                    <td>用户名：</td>
+                    <td><input class="easyui-textbox" data-options="" id="username" name="username" style="width:300px" value="{$admin.username}"/></td>
+                </tr>
+                <tr>
+                    <td >密码：</td>
+                    <td><input class="easyui-textbox" data-options="" id="password" name="password" style="width:300px" value="{$admin.password}"/></td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" id="save_admin" value="确认"  style="margin-left:120px; margin-top:10px;" />
+
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            $('#save_admin').click(function () {
+                var caozuo = $('#caozuo_admin').val();
+                $.ajax({
+                    url: '__APP__/AdminInfo/' + caozuo,
+                    data: { id: $('#id_admin').val(), username: $('#username').val(), password: $('#password').val() },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if (msg == "error") {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                        else if (msg == "username_null") {
+                            alert("请输入用户名");
+                            return;
+                        }
+                        else if (msg == "password_null") {
+                            alert("请输入密码");
+                            return;
+                        }
+                        else if (msg == "id_null") {
+                            alert("请选择要修改的数据");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    
+</body>
+</html>

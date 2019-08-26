@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    
+    <div id='transfer_toolber' style=" padding:5px 0px 5px 5px">
+        <input id="transfer_search" />
+        <div id="search_transfer_tiaojian" style="width:120px">
+            <div data-options="name:'phone',iconCls:'icon-ok'">手机号</div>
+            <!-- <div data-options="name:'username',iconCls:'icon-ok'">用户名</div> -->
+            <div data-options="name:'username',iconCls:'icon-ok'">用户名</div>
+        </div>
+
+        <div style=" height:5px"></div>
+<!--         <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="add_member">新增</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-edit'" id="edit_member">修改</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" id="delete_member">删除</a> -->
+    </div>
+
+    <table id='MemberTransfer'></table>
+    <div id="caozuo_transfer_audit" class="easyui-menu" data-options="onClick:caozuo_transfer_audit" style="width:120px;">
+        <div>已处理</div>
+    </div>
+    <input type="hidden" id="caozuo_field_transfer" name="">
+    <input type="hidden" id="caozuo_id_transfer" name="">
+    <script type="text/javascript">
+        $(function () {
+            $('#MemberTransfer').datagrid({
+                url: '__APP__/MemberTransfer/getData',
+                columns: [[
+                    { field: 'cbo_Transfer', checkbox: true },
+                    { field: 'id', title: 'ID', hidden: true },
+                    {
+                        field: 'username', title: '申请会员', width: 150, align: 'center'
+                    },
+                    {
+                        field: 'phone', title: '手机号', width: 150, align: 'center'
+                    },
+                    {
+                        field: 'create_time', title: '转账时间', width: 150, align: 'center'
+                    },
+                    {
+                        field: 'integral', title: '转账积分', width: 100, align: 'center'
+                    },
+                    {
+                        field: 'target', title: '目标会员', width: 100, align: 'center'
+                    },
+                    {
+                        field: 'end_time', title: '处理时间', width: 150, align: 'center'
+                    },
+                    {
+                        field: 'audit', title: '状态', width: 100, align: 'center',
+                        formatter: function (value, row, index) {
+                            var a = "";
+                            if(value=="1")
+                            {
+                                a = "已处理";
+                            }
+                            else
+                            {
+                                a = "未处理";
+                            }
+                            return a;
+                        }
+                    }
+                ]],
+                //斑马线
+                striped: true,
+                //底部分页
+                pagination: true,
+                //行号
+                rownumbers: true,
+                //只能选中一行
+                singleSelect: true,
+                //如果为true，单击复选框将永远选择行。如果为false，选择行将不选中复选框。
+                selectOnCheck: false,
+                //如果为true，当用户点击行的时候该复选框就会被选中或取消选中。如果为false，当用户仅在点击该复选框的时候才会呗选中或取消。
+                checkOnSelect: false,
+                //工具栏
+                toolbar: '#transfer_toolber',
+                //是否显示行脚
+                showFooter: true,
+                onRowContextMenu:function(e, index, row){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var pageX = e.pageX;
+                    var pageY = e.pageY;
+                    var td = $(e.target).closest("td");
+                    var field = td.attr('field');
+                    if(field=="audit")
+                    {
+                        if(row.audit=="0")
+                        {
+                            $('#caozuo_field_transfer').val(field);
+                            $('#caozuo_id_transfer').val(row.id);
+                            $('#caozuo_transfer_audit').menu('show', {left: pageX,top: pageY});
+                        }
+                        else{
+                            layer.msg("已处理");
+                        }
+                    }
+                }
+            });
+
+            $('#transfer_search').searchbox({
+                searcher: function (value, name) {
+                    //alert(value + "," + name)
+                    $('#MemberWithdrawal').datagrid('load', {
+                        parameterType: name,
+                        parameter: value
+                    });
+                },
+                menu: '#search_transfer_tiaojian',
+                prompt: '请输入值',
+                width: 200
+            });
+        })
+        
+        function caozuo_transfer_audit(item){
+            var name = $('#caozuo_field_transfer').val();
+            var id = $('#caozuo_id_transfer').val();
+            var value = 0;
+            if(item.text=="已处理")
+            {
+                value = 1;
+            }
+            // console.log(value);
+            $.ajax({
+                url:'__APP__/MemberTransfer/audit',
+                data:{"id":id,"name":name,"value":value},
+                type:'post',
+                success:function(msg){
+                    if(msg=="ok")
+                    {
+                        layer.msg("操作成功");
+                        $('#MemberTransfer').datagrid('reload');
+                        return;
+                    }
+                    if(msg=="error")
+                    {
+                        layer.msg("操作失败，请重新操作");
+                        return; 
+                    }
+                    if(msg=="id_null")
+                    {
+                        layer.msg("请选择要操作的数据");
+                        return;
+                    }
+                }
+            })
+        }
+
+    </script>
+</body>
+</html>

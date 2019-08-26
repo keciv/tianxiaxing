@@ -1,0 +1,43 @@
+msg：进入业务逻辑了 
+order_id：32 
+package_id：2 , member_id：184 
+count：1 
+msg：走一次 
+结果：成功 
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190624478153
+notify：进来啦 
+out_trade_no：20190624478153 
+order：Array 
+order_id：35 
+msg：进入业务逻辑了 
+order_id：35 
+package_id：3 , member_id：183 
+count：1 
+msg：走一次 
+return：进来啦 
+msg：进入业务逻辑了 
+order_id：36 
+package_id：2 , member_id：188 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：37 
+package_id：3 , member_id：191 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：38 
+package_id：1 , member_id：190 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：39 
+package_id：1 , member_id：192 
+count：1 
+msg：走一次 
+结果：成功 

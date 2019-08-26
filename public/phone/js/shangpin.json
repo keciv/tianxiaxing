@@ -1,0 +1,47 @@
+{
+	"status": "ok",
+	"result": [
+		{
+			"id": 1,
+			"cat_id": 1,
+			"brand_id": 12,
+			"business_id": 3,
+			"product_pic": "https:\/\/ss2.baidu.com\/6ONYsjip0QIZ8tyhnq\/it\/u=2052818915,2171991885&fm=173&app=49&f=JPEG?w=640&h=390&s=E2B014C57802745752B1148A03008095",
+			"title": "熊出没光头强同款帽子",
+			"param": "征❤婚",
+			"price": "22.23",
+			"content": "测试",
+			"place_origin": "澳大利亚",
+			"model_num": "T300",
+			"sortID": 3
+		}, 
+		{
+			"id": 2,
+			"cat_id": 1,
+			"brand_id": 12,
+			"business_id": 3,
+			"product_pic": "https:\/\/ss2.baidu.com\/6ONYsjip0QIZ8tyhnq\/it\/u=2052818915,2171991885&fm=173&app=49&f=JPEG?w=640&h=390&s=E2B014C57802745752B1148A03008095",
+			"title": "熊出没光头强同款帽子",
+			"param": "征❤婚",
+			"price": "22.15",
+			"content": "测试",
+			"place_origin": null,
+			"model_num": null,
+			"sortID": 123
+		},
+		{
+			"id": 3,
+			"cat_id": 1,
+			"brand_id": 12,
+			"business_id": 3,
+			"product_pic": "https:\/\/ss2.baidu.com\/6ONYsjip0QIZ8tyhnq\/it\/u=2052818915,2171991885&fm=173&app=49&f=JPEG?w=640&h=390&s=E2B014C57802745752B1148A03008095",
+			"title": "熊出没光头强同款帽子",
+			"param": "征❤婚",
+			"price": "22.15",
+			"content": "测试",
+			"place_origin": null,
+			"model_num": null,
+			"sortID": 123
+		}
+	]
+}

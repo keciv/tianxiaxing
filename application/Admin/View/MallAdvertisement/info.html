@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <style type="text/css">
+#table_content tr td:nth-child(1) {
+    width: 100px;
+    text-align: left; 
+}
+    </style>
+    <div id="div_MallAdvertisement">
+        <form id="form_MallAdvertisement" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id_MallAdvertisement" value="{$id}" />
+            <input type="hidden" id="caozuo_MallAdvertisement" value="{$caozuo}" />
+            <table style="margin:10px;">
+                <tr>
+                    <td>标题：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallAdvertisementTitle" name="MallAdvertisementTitle" style="width:200px" value="{$advertisement.title}"/></td>
+                </tr>
+                <tr>
+                    <td>位置：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallAdvertisementLocation" name="MallAdvertisementLocation" style="width:200px" value="{$advertisement.location}"/></td>
+                </tr>
+                <tr>
+                    <td>图片：</td>
+                    <td>
+                        <input type="file" id="MallAdvertisementImage" name="MallAdvertisementImage" style="width:200px"/>
+                        
+                        <a href="javascript:void(0)" class="easyui-linkbutton" onClick="upload('__APP__/Upload/upload', 'MallAdvertisementImage', 'form_MallAdvertisement', 'Advertisement');">上传</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>预览图：</td>
+                    <td>
+                        <img id="img_MallAdvertisementImage" src="__ROOT__/{$friendlink.picture}" style=" width:100px; height:100px" />
+                        <input type="hidden" id="hidden_MallAdvertisementImage" value="{$advertisement.picture}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>链接：</td>
+                    <td><input type="text" class="easyui-textbox" id="MallAdvertisementUrl" name="MallAdvertisementUrl" value="{$advertisement.link_url}" style="width:200px"/></td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" id="save_MallAdvertisement" value="确认" style="margin-left:120px; margin-top:10px;"/>
+
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            $('#save_MallAdvertisement').click(function () {
+                var caozuo = $('#caozuo_MallAdvertisement').val();
+                $.ajax({
+                    url: '__APP__/MallAdvertisement/' + caozuo,
+                    data: { id: $('#id_MallAdvertisement').val(), 
+                        title: $('#MallAdvertisementTitle').val(), 
+                        location: $('#MallAdvertisementLocation').val(), 
+                        picture: $('#hidden_MallAdvertisementImage').val(), 
+                        link: $('#MallAdvertisementUrl').val() 
+                    },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if (msg == "error") {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                        else if (msg == "id_null") {
+                            alert("请选择要修改的数据");
+                            return;
+                        }
+                        else if (msg == "picture_null") {
+                            alert("请上传图片");
+                            return;
+                        }
+                    }
+                })
+            })
+            $('#MallAdvertisementLocation').combobox({
+                method: 'post',
+                valueField: 'id',
+                textField: 'text',
+                data:[{id:'1',text:'位置一'},{id:'2',text:'位置二'},{id:'3',text:'位置三'}],
+                value:'{$advertisement.location}',
+                width:100,
+                panelHeight:80
+            })
+        })
+    </script>
+    
+</body>
+</html>

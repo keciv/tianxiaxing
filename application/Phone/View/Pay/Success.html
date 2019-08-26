@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>付款成功</title>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' 'self'  *.jythjc.com kefu.easemob.com;img-src 'self' data:;font-src 'self' data:;report-uri /error/csp.php" />
+  <link href="__ROOT__/public/phonemall/css/public.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="__ROOT__/public/phonemall/js/jquery-1.9.1.min.js"></script>
+  <link rel="stylesheet" href="__ROOT__/public/phonemall/css/shopping.css"/>
+</head>
+<body style="position:relative;">
+  <header style="background:#a1a1a1">
+    <div class="order clearfix">
+      <div class="procon_top">
+        <a href="__APP__/MyCenter.html" class="fack"><img src="__ROOT__/public/phonemall/images/fack.png"></a>
+        付款成功
+      </div>
+    </div>
+  </header>  
+  <div class="take-delivery">
+    <div class="status">
+      <h2><img src="__ROOT__/public/phonemall/images/zfcg.png">您已成功付款</h2>
+      <div class="successInfo">
+        <p class="fkje">付款金额：<span>¥{$Success.priceAll}</span></p>
+        <p>收货人：{$Success.Name}</p>
+        <p>联系电话：{$Success.Phone}</p>
+        <p>收货地址：{$Success.province} {$Success.city} {$Success.district}{$Success.address}</p>
+        <p>请认真核对您的收货信息，如有错误请联系客服 </p>                        
+        <div class="option">
+          <span class="info">您可以</span>&nbsp;&nbsp;
+          <a href="__APP__/ProductShow_{$Success.id}" class="J_MakePoint">查看&nbsp;<span>已买到的宝贝</span></a>&nbsp;&nbsp;
+          <a href="#" class="J_MakePoint">查看&nbsp;<span>交易详情</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="gotop backtop" style="display:none;"></div>
+</body>
+</html>
+<script type="text/javascript">
+//返回顶部
+$(document).ready(function(){
+	$(window).scroll(function () {
+		var scrollHeight = $(document).height();
+		var scrollTop = $(window).scrollTop();
+		var $windowHeight = $(window).innerHeight();
+		scrollTop > 75 ? $(".gotop").fadeIn(200).css("display","block") : $(".gotop").fadeOut(200).css({"background-image":"url(__ROOT__/public/phonemall/images/iconfont-fanhuidingbu.png)"});
+	});
+	$('.backtop').click(function (e) {
+		$(".gotop").css({"background-image":"url(__ROOT__/public/phonemall/images/iconfont-fanhuidingbu_up.png)"});
+		e.preventDefault();
+		$('html,body').animate({ scrollTop:0});
+	});
+});
+</script>

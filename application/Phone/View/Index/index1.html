@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>天下行</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="__ROOT__/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="__ROOT__/public/phone/lb/css/swiper.min.css">
+		<link rel="stylesheet" href="__ROOT__/public/phone/css/reset.css">
+		<link rel="stylesheet" href="__ROOT__/public/phone/css/public.css">
+		<link rel="stylesheet" href="__ROOT__/public/phone/lb/css/dropload.css">
+		<link rel="stylesheet" href="__ROOT__/public/phone/css/index.css">
+		<link rel="stylesheet" href="__ROOT__/public/phone/css/style.css">
+		<script src="__ROOT__/public/phone/js/jquery.min.js"></script>
+		<script src="__ROOT__/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="__ROOT__/public/phone/lb/js/swiper.min.js"></script>
+		<script src="__ROOT__/public/phone/js/rem.js"></script>
+		<script src="__ROOT__/public/phone/js/iscroll.js"></script>
+	</head>
+	<body class="pd1307 body-bj">
+		<div class="index-header">
+			<div class="logo">
+				零零售
+			</div>
+			<div class="index-search">
+				<div class="search-box">
+					<input type="search" name="" placeholder="输入名称或品牌">
+				</div>
+			</div>
+		</div>
+
+		<div class="index-banner">
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+					
+				</div>
+				<!-- Add Pagination -->
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+
+		<!-- <div class="index-prolist content">
+			<div id="root">
+				
+			</div>
+		</div> -->
+
+
+		<div class="wrapper">
+			<div id="Scroller">
+				<section class="index-prolist">
+					
+
+				</section>
+			     <div class="pull-loading">上拉加载</div>
+			</div>
+			
+
+		</div>
+		<include file="Public/footer" />
+		<div class="lpk_foot_bg"></div>
+		<script>
+			$(function() {
+				var swiper = new Swiper('.index-banner .swiper-container', {
+					slidesPerView: 'auto',
+					centeredSlides: true,
+					spaceBetween: 10,
+					loop: true,
+					pagination: {
+						el: '.index-banner .swiper-pagination',
+						clickable: true,
+					},
+				});
+			})
+		</script>
+		<script>
+			$(function() {
+				load_banner();
+				load_product();
+			})
+
+			var myscroll = new iScroll("wrapper", {
+				onScrollMove: function() { //拉动时
+					//上拉加载
+					if(this.y < this.maxScrollY) {
+						$(".pull-loading").html("释放加载");
+						$(".pull-loading").addClass("loading");
+					} else {
+						$(".pull-loading").html("上拉加载");
+						$(".pull-loading").removeClass("loading");
+					}
+				},
+				onScrollEnd: function() { //拉动结束时
+					//上拉加载
+					if($(".pull-loading").hasClass('loading')) {
+						$(".pull-loading").html("加载中...");
+						pullOnLoad();
+					}
+				},
+				onRefresh: function() {
+					$('.pull-loading').html("上拉加载");
+				}
+			});
+			//上拉加载函数,ajax
+			var num = 6; //每次加载4条
+			var page = 1;
+
+			function load_product(fn) {
+				var ids = fn;
+				setTimeout(function() {
+					$.ajax({
+						url: 'index.php/Index/get_product',
+						type: "get",
+						dataType: 'json',
+						data: {
+							CurrentPage: page,
+							paginalNum: num
+						},
+						success: function(data) {
+
+							if(data.code=="200")
+							{
+								//有数据
+								if(data.data.length>0)
+								{
+									var result = "";
+									for(var i = 0; i < data.data.length; i++) {
+										var row = data.data[i];
+										result += `
+										<div class="box">
+											<a href="javascript:;" id="${row.id}">
+												<img class="itemImg" src="__ROOT__/${row.picture}">
+												<div class="tit">
+													<h3>${row.title}</h3>
+													<p>¥${row.price}/${row.unit}</p>
+												</div>
+											</a>
+										</div>`;
+									}
+									$("#Scroller section").append(result);
+									page++;
+									myscroll.refresh();
+								}
+								else {
+									$(".pull-loading").text("无数据");
+								}
+							}
+							else
+							{
+								layer.msg(data.msg);
+							}
+						},
+						error: function() {
+							console.log("出错了");
+						}
+					});
+					myscroll.refresh();
+				}, 1000);
+			}
+
+			function load_banner() {
+				$.ajax({
+					url: 'index.php/Index/get_banner',
+					type: "get",
+					dataType: 'json',
+					data: {
+						"name":"banner"
+					},
+					success: function(data) {
+						if(data.code=="200")
+						{
+							//有数据
+							if(data.data.length>0)
+							{
+								var result = "";
+								for(var i = 0; i < data.data.length; i++) {
+									var row = data.data[i];
+									result += `
+									<div class="swiper-slide">
+										<img src="__ROOT__/${row.picture}" />
+									</div>`;
+								}
+								$(".swiper-wrapper").append(result);
+								
+							}
+							else {
+								$(".pull-loading").text("无数据");
+							}
+						}
+						else
+						{
+							layer.msg(data.msg);
+						}
+					},
+					error: function() {
+						console.log("出错了");
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

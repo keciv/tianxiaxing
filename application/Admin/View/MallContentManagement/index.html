@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <table id="MallContentManagement"></table>
+
+    <div id='toolbar_MallContentManagement' style=" padding:5px 0px 5px 5px">
+        <div style=" height:5px"></div>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="addMallContent">新增</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="editMallContent">修改</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" id="delMallContent">删除</a>
+    </div>  
+    
+    <script type="text/javascript">
+        $('#MallContentManagement').datagrid({
+            url: '__APP__/MallContentManagement/getData',
+            columns: [[
+                { field: 'cbo_content', checkbox: true },
+                { field: 'id', title: 'ID', hidden: true, width: 100 },
+                { field: 'title', title: '标题', align: 'center', width: 350 },
+                { field: 'time', title: '时间', align: 'center', width: 150 }
+            ]],
+            toolbar: '#toolbar_MallContentManagement',
+            pagination: true,
+            singleSelect: true,
+            selectOnCheck: false,
+            rownumbers: true,
+            idField: 'id',
+            queryParams: { controller: $('#MallController').val(), 'navigation_id': '{$navigation_id}' },
+            checkOnSelect: false
+        })
+
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var controller = $('#MallController').val();
+            var type = "";
+            if (controller == "NewList" || controller == "VideoList" || controller == "PictureList") {
+                type = "MallContentNew";
+            }
+            else if (controller == "Recruitment") {
+                type = "MallRecruitment";
+            }
+            $('#addMallContent').click(function () {
+                var titleMsg = '添加_内容';
+                var IsHave = $('#MallContent_tabs').tabs('exists', titleMsg);
+                if (IsHave) {
+                    $('#MallContent_tabs').tabs('select', titleMsg);
+                    var tab = $('#MallContent_tabs').tabs('getSelected');
+                    tab.panel('refresh', "__APP__/" + type + '.html?navigation_id=' + $('#MallLanmuID').val());
+                }
+                else {
+                    $('#MallContent_tabs').tabs('close', "修改_内容");
+                    $('#MallContent_tabs').tabs('add', {
+                        title: titleMsg,
+                        content: '<div class="easyui-panel" href="__APP__/' + type + '.html?navigation_id=' + $('#MallLanmuID').val() + '" fit="true" border="false" ></div>',
+                        closable: true
+                    });
+                }
+
+            })
+
+
+            $('#editMallContent').click(function () {
+                var titleMsg = '修改_内容';
+                
+                var selected = $('#MallContentManagement').datagrid('getSelected');
+                if (selected) 
+                {
+                    var IsHave = $('#MallContent_tabs').tabs('exists', titleMsg);
+                    if (IsHave) {
+                    $('#MallContent_tabs').tabs('select', titleMsg);
+                    var tab = $('#MallContent_tabs').tabs('getSelected');
+                    tab.panel('refresh', "__APP__/" + type + '/info?id=' + selected.id);
+                    }
+                    else {
+                        $('#MallContent_tabs').tabs('close', "添加_内容");
+                        $('#MallContent_tabs').tabs('add', {
+                            title: titleMsg,
+                            content: '<div class="easyui-panel" href="__APP__/' + type + '/info?id=' + selected.id + '" fit="true" border="false" ></div>',
+                            closable: true
+                        });
+                    }
+                }
+                else {
+                    alert("请选择要进行修改的一条数据");
+                }
+            })
+
+
+            $('#delMallContent').click(function () {
+                var checked = $('#MallContentManagement').datagrid('getChecked');
+                var delID = "";
+                //alert(checked.length);
+                if (checked.length > 0) {
+                    $.messager.confirm('确认', '您确认要删除这些数据吗？', function (r) {
+                        if (r) {
+
+                            for (var i = 0; i < checked.length; i++) {
+                                //alert(selected[i].ID);
+                                delID += checked[i].id;
+                                delID += ",";
+                            }
+
+                            delID = delID.substr(0, delID.length - 1);
+                            //alert(delID);
+
+                            $.ajax({
+                                url: '__APP__/' + type + '/delete',
+                                data: {"id": delID },
+                                type: 'post',
+                                success: function (msg) {
+                                    if (msg == "ok") {
+                                        alert("删除成功");
+                                        $('#MallContentManagement').datagrid('reload');
+                                    }
+                                    if (msg == "error") {
+                                        alert("删除失败，请重新尝试");
+                                    }
+                                    if (msg == "id_null") {
+                                        alert("数据不存在，刷新后请重新操作");
+                                    }
+                                }
+                            })
+
+                        }
+                    })
+                }
+                else {
+                    alert("请选择要删除的数据");
+                }
+            })
+
+        })
+    </script>
+
+</body>
+</html>

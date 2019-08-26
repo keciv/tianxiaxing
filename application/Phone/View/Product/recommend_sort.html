@@ -1,0 +1,130 @@
+<!doctype html>
+<html class="no-js">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+	<link rel="stylesheet" href="__ROOT__/public/phone/css/amazeui.min.css">
+	<link rel="stylesheet" href="__ROOT__/public/phone/css/app.css">
+	<link rel="stylesheet" href="__ROOT__/public/phone/css/index.css">
+	<script src="__ROOT__/public/phone/js/jquery.min.js"></script>
+	<script src="__ROOT__/public/phone/js/amazeui.min.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/layer/layer.js"></script>
+	<script>
+		$(function() {
+			var $slider = $('#demo-slider-0');
+			var counter = 0;
+			var getSlide = function() {
+				counter++;
+				return '<li><img src="http://s.amazeui.org/media/i/demos/bing-' +
+				(Math.floor(Math.random() * 4) + 1) + '.jpg" />' +
+				'<div class="am-slider-desc">动态插入的 slide ' + counter + '</div></li>';
+			};
+
+			$('.js-demo-slider-btn').on('click', function() {
+				var action = this.getAttribute('data-action');
+				if (action === 'add') {
+					$slider.flexslider('addSlide', getSlide());
+				} else {
+					var count = $slider.flexslider('count');
+					count > 1 && $slider.flexslider('removeSlide', $slider.flexslider('count') - 1);
+				}
+			});
+		});
+	</script>
+	<script type="text/javascript">
+	    $(function(){
+	    	$('#search').click(function(){
+	    		$('#form_search').submit();
+	    	})
+	        $('#form_search').submit(function(){
+	            var key = $('#search_key').val();
+	            if(key.length<=0)
+	            {
+	                layer.msg("请输入关键词再进行搜索");
+	                return false;
+	            }
+	            else
+	            {
+	                return true;
+	            }
+	        })
+	    })
+	</script>
+	<style type="text/css">
+.nav:after{content: "";      
+display: block;       
+clear: both;          
+visibility: hidden;   
+line-height: 0;      
+height: 0;          
+font-size:0;}
+.nav{
+	    background: #0285ed;
+}
+	</style>
+
+
+</head>
+<body>
+	<!-- header -->
+	<include file="Public/header" />
+	<div style="clear:both;"></div>
+	<!-- banner -->
+	<include file="Public/banner" />
+	<!-- 搜索框 s -->
+	<div class="sousuo">
+		<div class="con">
+			<form id="form_search" action="__APP__/ProductList.html" method="post">
+				<span>商品</span>
+				<input placeholder="请输入要搜索的关键词" type="text" value="" id="search_key" name="search">
+				<a href="javascript:void(0)" class="sear_bth" id="search">搜索</a>
+			</form>
+		</div>     
+	</div>
+	<!-- 搜索框 e-->
+
+	<!-- 热卖-->
+	<div class="remaitit">
+		<div class="con">
+			<div class="tit">
+				<div class="text">
+					<img src="__ROOT__/public/phone/images/tit2.png"/>热销品类
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="main">
+		<volist name="sort" id="yiji">
+			<div class="floor">
+				<div class="title">
+					<div class="con">
+						<span class="indexbgPurple">{$yiji.sort_name}</span>
+						<a href="__APP__/ProductSort_{$yiji.id}.html" class="more">更多 &raquo;</a>
+					</div>
+				</div>
+				<div class="contian hotList">
+					<ul class="clearfix">
+						<volist name="yiji.children" id="erji">
+							<li style="background: url(__ROOT__/{$erji.picture}) 100% 100% no-repeat; background-size:100%;">
+								<div class="bt">
+									<p>{$erji.sort_name}</p>
+									<a href="__APP__/ProductList_{$erji.id}.html">专区 &gt;</a>
+								</div>
+							</li>
+						</volist>
+					</ul>
+				</div>
+				<div class="img_gg"><img src="__ROOT__/{$yiji.advertisement}" /></div>
+			</div>
+		</volist>
+	</div>
+
+	<div style="height:82px;"></div>
+	<!-- footer -->
+	<include file="Public/footer" />
+</body>
+</html>

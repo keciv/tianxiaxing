@@ -1,0 +1,265 @@
+<?php if (!defined('THINK_PATH')) exit();?>﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>车乐友后台管理系统</title>
+    <link rel="stylesheet" type="text/css" href="/public/admin/css/themes/gray/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="/public/admin/css/themes/icon.css" />
+    <script src="/public/admin/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/public/admin/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/public/admin/js/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="/public/admin/js/jquery.cookie.js"></script>
+    <!--ajax图片上传-->
+    <script src="/public/admin/js/jquery-form.js"></script>
+    <script src="/public/admin/myJS/JqueryForm.js"></script>
+    <!--按钮增删改-->
+    <script src="/public/admin/myJS/myJS.js" type="text/javascript"></script>
+    <!-- 编辑器 -->
+    <link rel="stylesheet" href="/public/kindeditor/themes/default/default.css" />
+    <link rel="stylesheet" href="/public/kindeditor/plugins/code/prettify.css" />
+    <script type="text/javascript" src="/public/kindeditor/kindeditor-all.js"></script>
+    <script charset="utf-8" src="/public/kindeditor/lang/zh-CN.js"></script>
+    <script charset="utf-8" src="/public/kindeditor/plugins/code/prettify.js"></script>
+    <script charset="utf-8" src="/public/kindeditor/createKindEdit.js"></script>
+    <!-- 弹出框 -->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <link rel="stylesheet" type="text/css" href="/public/layui/css/layui.css" />
+    <script type="text/javascript" src="/public/layui/layui.js"></script>
+    
+    <style type="text/css">
+    body{font-family: "微软雅黑"; font-size: 14px;}
+    .xuanfu
+    {
+        cursor:pointer;
+        font-size:12px;
+        height:30px; 
+        line-height:30px; 
+        width:100%;
+    }
+    .xuanfu span
+    {
+        display: inline-block;
+        width: 100%;
+        font-size:12px;
+    }
+    .xuanfu span a{
+        cursor:pointer;
+        text-decoration:none;
+    }
+    .xuanfu span:hover {background: #0081c2 !important;}
+    .xuanfu span:hover {color: #fff !important;}
+    .layout-panel br{display: none;}
+    .logo {
+    float: left;
+    color: #FFF;
+    margin-top: 10px;
+    line-height: 45px;
+    margin-left:30px;
+    }
+    .logo h1{
+    font-size: 31px; font-family: "微软雅黑";    letter-spacing: 3px;}
+    .logo img {
+    float: left;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+.head-l {
+    float: right;
+    margin-top: 37px;
+    margin-left: 15px; margin-right:40px; 
+}
+.head-l .button {
+   display: inline-block; width: 120px; height: 35px; line-height: 35px; text-align: center;border-radius: 6px; color: #fff;text-decoration:none;
+   cursor: pointer;
+}
+.head-l .button.bg-green{background: #2c7;}
+.head-l .button.bg-blue{background: #0ae;}
+.head-l .button.bg-red{background: #e33;}
+.head-l .button span{width: 20px; margin-right: 10px;}
+.head-l .button span img{width: 20px; height: 20px; vertical-align: middle;}
+    </style>
+</head>
+<body class="easyui-layout" >
+    <!--上区域-->
+    <div data-options="region:'north',title:'North Title',split:true,collapsible:false,noheader:true" style="height: 117px; background-image:url(/public/admin/image/logotop.jpg) ;background-size:cover;">
+        <div class="logo">
+            <h1><img src="/public/admin/image/y.jpg" class="radius-circle rotate-hover" height="50" alt="">后台管理中心</h1>
+        </div>
+        <div class="head-l">
+            <!-- <a class="button button-little bg-green" href="http://www.aomeilaite.com" target="_blank">
+             <span class="icon-home"><img src="/public/admin/image/shouye.png"></span> 前台首页
+            </a> --> &nbsp;&nbsp;
+            <a class="button button-little bg-blue"><span class="icon-wrench"><img src="/public/admin/image/geren.png"></span>欢迎tysxlc</a> &nbsp;&nbsp;
+            <a class="button button-little bg-red" id="exit" ><span class="icon-power-off"><img src="/public/admin/image/tuichu.png" style="width:16px;height:16px;"></span> 退出登录</a>
+        </div>
+    </div>
+    <!--左区域-->
+    <div data-options="region:'west',title:'菜单导航',split:true" style="width: 170px">
+        <!--菜单-->
+        <div id="left_nemu" class="easyui-accordion" data-options="multiple:true" border="0px">
+            <!--菜单1-->
+            <div id="mukuai1" title="会员中心" style="text-align:center;">
+                <div class="xuanfu">
+                    <br />
+                    <span myurl="MemberInfo.html">会员管理</span>
+                </div>
+                <!-- <div class="xuanfu">
+                    <br />
+                    <span myurl="ShopPath.html">店铺通道</span>
+                </div>
+                <div class="xuanfu">
+                    <br />
+                    <span myurl="Gonghuoshang.html">供货商申请</span>
+                </div> -->
+            </div>
+            <div id="mukuai2" title="管理员中心" style="text-align:center;">
+                <div class="xuanfu"><br /><span myurl="AdminInfo.html">» 管理员管理</span></div>
+                <!--<div class="xuanfu"><br /><span myurl="AdminInfo.html">角色管理</span></div>
+                <div class="xuanfu"><br /><span myurl="AdminInfo.html">操作日志</span></div>-->
+            </div>
+            <!-- <div id="mukuai1" title="规则管理" style="text-align:center;">
+                <div class="xuanfu">
+                    <br />
+                    <span myurl="IntegralRule.html">商城规则</span>
+                </div>
+                <div class="xuanfu">
+                    <br />
+                    <span myurl="DistributionRule.html">分销规则</span>
+                </div>
+            </div> -->
+            <div id="mukuai3" title="商城管理" style="text-align:center;">
+                <div class="xuanfu"><br /><span myurl="MallWebInfo.html">» 基本信息</span></div>
+                <div class="xuanfu"><br /><span myurl="MallBanner.html">» 商城Banner</span></div>
+                <div class="xuanfu"><br /><span myurl="MallContent.html">» 商城内容</span></div>
+                <!-- <div class="xuanfu"><br /><span myurl="MallAdvertisement.html">» 广告管理</span></div> -->
+            </div>
+            <div id="mukuai3" title="店铺管理" style="text-align:center;">
+                <div class="xuanfu"><br /><span myurl="Store.html">» 店铺管理</span></div>
+            </div>
+            <div id="mukuai5" title="产品管理" style="text-align:center;">
+                <div class="xuanfu"><br />
+                    <span myurl="MallProductSort.html">» 类别管理</span>
+                </div>
+                <div class="xuanfu"><br />
+                    <span myurl="MallProductModel.html">» 商品模型</span>
+                </div>
+                <div class="xuanfu"><br />
+                    <span myurl="MallProductSpec.html">» 商品规格</span>
+                </div>
+                <div class="xuanfu"><br />
+                    <span myurl="MallProductAttr.html">» 商品属性</span>
+                </div>
+                <div class="xuanfu"><br />
+                    <span myurl="MallProduct.html">» 商品管理</span>
+                </div>
+            </div>
+           <!--  <div id="mukuai6" title="礼包管理" style="text-align:center;"><br />
+                <div class="xuanfu"><span myurl="Package.html">» 礼包管理</span></div>
+            </div> -->
+            <div id="mukuai6" title="订单管理" style="text-align:center;"><br />
+                <div class="xuanfu"><span myurl="Product_Order.html">» 商品订单</span></div>
+                <!-- <div class="xuanfu"><span myurl="Package_Order.html">» 礼包订单</span></div> -->
+            </div>
+            <div id="mukuai1" title="明细" style="text-align:center;">
+                <!-- <div class="xuanfu">
+                    <br />
+                    <span myurl="Commission_Record.html">奖励明细</span>
+                </div> -->
+                <div class="xuanfu">
+                    <br />
+                    <span myurl="Withdrawal_Record.html">提现明细</span>
+                </div>
+               <!--  <div class="xuanfu">
+                    <br />
+                    <span myurl="Integral_Record.html">积分明细</span>
+                </div> -->
+            </div>
+            <!-- <div id="mukuai6" title="积分管理" style="text-align:center;"><br />
+                <div class="xuanfu">
+                    <br />
+                    <span myurl="MemberIntegral.html">积分管理</span>
+                </div>
+            </div> -->
+            <!-- <div id="mukuai6" title="排行榜管理" style="text-align:center;"><br />
+                <div class="xuanfu">
+                    <br />
+                    <span myurl="MemberIntegral.html">排行榜管理</span>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <!--右区域-->
+    <div data-options="region:'center'">
+        <div id="right" class="easyui-tabs" fit="true" border="0" >
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('.xuanfu span').click(function () {
+                var titleMsg = $(this).html();
+                var myContent = $(this).attr('myUrl');
+                var IsHave = $('#right').tabs('exists', titleMsg);
+                if (IsHave) {
+                    $('#right').tabs('select', titleMsg);
+                    ////获得选中的选项卡
+                    var tab = $('#right').tabs('getSelected');
+                    ////刷新选项卡内容
+                    tab.panel('refresh');
+                }
+                else {
+
+                    if (myContent == "AccountDetails.htm") {
+                        $('#div_chakanzhanghu').dialog('open');
+                        return;
+                    }
+                    $('#right').tabs('add', {
+                        title: titleMsg,
+                        content: '<div class="easyui-panel" href="/admin.php/' + myContent + '" fit="true" border="false" ></div>',
+                        closable: true
+                    });
+                }
+            });
+            $('#right').tabs('add', {
+                title: '关于网站',
+                content: '<div class="easyui-panel" href="/admin.php/Welcome.html" fit="true" border="false" ></div>',
+                closable: true,
+
+                closable: false
+            });
+        })
+    </script>
+    <script type="text/javascript">
+        //退出
+        $('#exit').click(function () {
+            $.messager.confirm('确认', '您确认要退出吗？', function (r) {
+                if (r) {
+                    $.ajax({
+                        url: '/admin.php/Login/drop_out',
+                        data: {},
+                        success: function (msg) {
+                            if (msg == "ok") {
+                                window.location = "/admin.php/Login.html";
+                            }
+                            else {
+                                alert("出现未知错误，请重新操作");
+                            }
+                        }
+                    })
+                }
+            });
+        })
+    </script>
+    <script type="text/javascript">
+        $('.xuanfu span').each(function (i) {
+            $(this).hover(
+                function () {
+                    $(this).css('background-color', 'Gray');
+                },
+                function () {
+                    $(this).css('background-color', 'White');
+                }
+            )
+        })
+    </script>
+</body>
+</html>

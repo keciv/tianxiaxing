@@ -1,0 +1,410 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <style>
+        /*input {
+            width:100%;
+        }*/
+        .layui-upload-img{width: 200px;height: 100px;margin:5px;}
+        .img-hidden{
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100px;
+            z-index: 100;
+            background-color: rgba(100,100,100,0.4);
+            margin: 5px;
+        }
+        .img-pra i{
+            font-style: normal;
+            text-align: center;
+            line-height: 18px;
+            display: none;
+            position: absolute;
+            /* display: block; */
+            width: 20px;
+            height: 20px;
+            border-radius: 30px;
+            top: -5px;
+            right: -5px;
+            color: #fff;
+            background-color: red;
+            z-index: 101;
+            font-size: 26px;
+        }
+        
+        .shangyi{
+            color:#fff;font-size:16px;line-height:30px;text-align:center; position:absolute;left:0;bottom:0;width:99px;height:30px;border-top:1px solid #fff;border-right:1px solid #fff;
+        }
+        .xiayi{
+            position:absolute;right:0;bottom:0;width:100px;height:30px;border-top:1px solid #fff;color:#fff;font-size:16px;line-height:30px;text-align:center;
+        }
+        .clearfix:after {    
+            content: ".";      
+            display: block;       
+            clear: both;          
+            visibility: hidden;   
+            line-height: 0;      
+            height: 0;          
+            font-size:0;         
+        }
+        .clearfix { *zoom:1;} 
+
+    </style>
+    <div id="div_MallPackage" align="center">
+        <form id="form_MallPackage" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id_MallPackage" value="{$id}" />
+            <input type="hidden" id="caozuo_MallPackage" value="{$caozuo}" />
+            <table id="table_content">
+                <tr>
+                    <td align="right">礼包名称：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallPackageTitle" name="MallPackageTitle" style="width:300px" value="{$package.name}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">分销数量：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallPackageCount" name="MallPackageCount" style="width:150px" value="{$package.count}"/>元</td>
+                </tr>
+                <tr>
+                    <td align="right">价格：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallPackagePrice" name="MallPackagePrice" style="width:150px" value="{$package.price}"/>元</td>
+                </tr>
+                <tr>
+                    <td align="right">提现额度：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallPackageWithdrawal" name="MallPackageWithdrawal" style="width:150px" value="{$package.withdrawal}"/>元</td>
+                </tr>
+                <tr>
+                    <td align="right">积分：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallPackageIntegral" name="MallPackageIntegral" style="width:150px" value="{$package.integral}"/>元</td>
+                </tr>
+                <tr>
+                    <td align="right">图片：</td>
+                    <td>
+                        <input type="file" id="MallPackagePicture" name="MallPackagePicture" style="width:200px"/>
+                        
+                        <a href="javascript:void(0)" class="easyui-linkbutton" onClick="upload('__APP__/Upload/upload', 'MallPackagePicture', 'form_MallPackage', 'Package');">上传</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">预览图：</td>
+                    <td>
+                        <img id="img_MallPackagePicture" src="/{$package.picture}" style=" width:100px; height:100px" />
+                        <input type="hidden" id="hidden_MallPackagePicture" value="{$package.picture}" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="right">描述：</td>
+                    <td><input class="easyui-textbox" data-options="multiline: true,height: 40" id="MallPackageDescription" name="MallPackageDescription" style="width:300px" value="{$package.description}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">多图：</td>
+                    <td>
+                        <button type="button" class="layui-btn layui-btn-normal" id="editor_MallPackage_Picturemore">
+                            <i class="layui-icon"></i>选择图片
+                        </button>
+                        <button type="button" class="layui-btn" id="editor_MallPackage_Picturemore_upload">
+                            <i class="layui-icon"></i>确认上传
+                        </button>
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 660px">
+                            预览图：
+                            <div class="layui-upload-list clearfix" name="yulan_picture_more"></div>
+                        </blockquote>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">详情：</td>
+                    <td>
+                        <button type="button" class="layui-btn layui-btn-normal" id="editor_MallPackage_Content">
+                            <i class="layui-icon"></i>选择图片
+                        </button>
+                        <button type="button" class="layui-btn" id="editor_MallPackage_Content_upload">
+                            <i class="layui-icon"></i>确认上传
+                        </button>
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 660px">
+                            预览图：
+                            <div class="layui-upload-list clearfix" name="yulan_picture_content"></div>
+                        </blockquote>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <a id="save_MallPackage" href="javascript:void(0)" class="easyui-linkbutton">确认</a> 
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            //创建多图上传
+            var div_picture_more = $('#form_MallPackage [name="yulan_picture_more"]');
+            console.log(div_picture_more);
+            var div_content = $('#form_MallPackage [name="yulan_picture_content"]');
+            console.log(div_content);
+            //获取数据库信息
+            var picture_more_str = "{$product.picturemore}";
+            console.log(picture_more_str);
+            var content_str = "{$product.content}";
+            if(picture_more_str!="")
+            {
+                var picture_more_array = picture_more_str.split(",");
+                for(i = 0,len=picture_more_array.length; i < len; i++) {
+                    var html =  '<div class="img-pra" data-index="'+i+'" style="float:left;position: relative;">'+
+                                    '<img src="__ROOT__/'+ picture_more_array[i] +'" class="layui-upload-img">'+
+                                    '<i class="delete">×</i>'+
+                                    '<div class="img-hidden" style="">'+
+                                        '<div class="shangyi">上移</div>'+
+                                        '<div class="xiayi">下移</div>'+
+                                    '</div>'+
+                                '</div>';
+                    $(div_picture_more).append(html);
+                    picture_more_operation(div_picture_more,i);
+                }
+            }
+            if(content_str!="")
+            {
+                var content_array = content_str.split(",");
+                for(i = 0,len=content_array.length; i < len; i++) {
+                    var html =  '<div class="img-pra" data-index="'+i+'" style="float:left;position: relative;">'+
+                                    '<img src="__ROOT__/'+ content_array[i] +'" class="layui-upload-img">'+
+                                    '<i class="delete">×</i>'+
+                                    '<div class="img-hidden" style="">'+
+                                        '<div class="shangyi">上移</div>'+
+                                        '<div class="xiayi">下移</div>'+
+                                    '</div>'+
+                                '</div>';
+                    $(div_content).append(html);
+                    picture_more_operation(div_content,i);
+                }
+            }
+
+            layui.use('upload', function(){
+                var $ = layui.jquery,
+                upload = layui.upload;
+                //执行实例
+                var uploadInst = upload.render({
+                    elem: '#editor_MallPackage_Picturemore',
+                    url: '__APP__/Upload/upload/',
+                    data:{filePath:"public/upload/Package/",fileID:"file"},
+                    auto: false,
+                    multiple: true,
+                    bindAction: '#editor_MallPackage_Picturemore_upload',
+                    choose: function(obj){
+                        // console.log(obj);
+                        //预读本地文件示例，不支持ie8
+                        obj.preview(function(index, file, result){
+                            // var length = $('.img-pra').length;
+                            var html =  '<div class="img-pra" data-index="'+index+'" style="float:left;position: relative;">'+
+                                            '<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">'+
+                                            '<i class="delete">×</i>'+
+                                            '<div class="img-hidden" style="">'+
+                                                '<div class="shangyi">上移</div>'+
+                                                '<div class="xiayi">下移</div>'+
+                                            '</div>'+
+                                            '<div class="modified_join" style="text-align:center">'+
+                                                '待上传'+
+                                            '</div>'+
+                                        '</div>';
+                            $(div_picture_more).append(html);
+                            
+                            picture_more_operation(div_picture_more,index);
+                        });
+                        // obj = obj.pushFile();
+                    },
+                    before: function(obj){
+                        layer.load();
+                    },
+                    allDone: function(obj){ //当文件全部被提交后，才触发
+                        console.log(obj.total); //得到总文件数
+                        console.log(obj.successful); //请求成功的文件数
+                        console.log(obj.aborted); //请求失败的文件数
+                    },
+                    done: function(res, index, upload){
+                        layer.closeAll('loading');
+                        console.log("res："+res);
+                        console.log("index："+index);
+                        if(res.status=="ok")
+                        {
+                            // var array = index.split("-");
+                            // var index_now = array[array.length-1];
+                            var index_now = index;
+                            // console.log("index_now："+index_now);
+                            div_picture_more.find('.img-pra').each(function(){
+                                var index_list = $(this).attr('data-index');
+                                // array = index_list.split("-");
+                                // index_list = array[array.length-1];
+                                if(index_now == index_list)
+                                {
+                                    $(this).find('.layui-upload-img').attr('src',"__ROOT__/"+res.filename);
+                                    $(this).find('.modified_join').text('上传成功');
+                                }
+                            })
+                            // $(".modified_join").empty().html("上传成功");
+                        }
+                        if(res.status=="error")
+                        {
+
+                        }
+                        if(res.status=="size_error")
+                        {
+                            layer.msg("请来确认图片大小不能超过500KB");
+                            return;
+                        }
+                        if(res.status=="file_null")
+                        {
+                            layer.msg("请选择要上传的图片");
+                            return;
+                        }
+                    },
+                    error: function(index, upload){
+                        layer.closeAll('loading');
+                    }
+                });
+                //详情
+                upload.render({
+                    elem: '#editor_MallPackage_Content',
+                    url: '__APP__/Upload/upload/',
+                    data:{filePath:"public/upload/Package/",fileID:"file"},
+                    auto: false,
+                    multiple: true,
+                    bindAction: '#editor_MallPackage_Content_upload',
+                    choose: function(obj){
+                        // console.log(obj);
+                        //预读本地文件示例，不支持ie8
+                        obj.preview(function(index, file, result){
+                            var html =  '<div class="img-pra" data-index="'+index+'" style="float:left;position: relative;">'+
+                                            '<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">'+
+                                            '<i class="delete">×</i>'+
+                                            '<div class="img-hidden" style="">'+
+                                                '<div class="shangyi">上移</div>'+
+                                                '<div class="xiayi">下移</div>'+
+                                            '</div>'+
+                                            '<div class="modified_join" style="text-align:center">'+
+                                                '待上传'+
+                                            '</div>'+
+                                        '</div>';
+                            $(div_content).append(html);
+                            
+                            picture_more_operation(div_content,index);
+                        });
+                        // obj = obj.pushFile();
+                    },
+                    before: function(obj){
+                        layer.load();
+                    },
+                    allDone: function(obj){ //当文件全部被提交后，才触发
+                        // console.log(obj.total); //得到总文件数
+                        // console.log(obj.successful); //请求成功的文件数
+                        // console.log(obj.aborted); //请求失败的文件数
+                    },
+                    done: function(res, index, upload){
+                        layer.closeAll('loading');
+                        // console.log("res："+res);
+                        // console.log("index："+index);
+                        if(res.status=="ok")
+                        {
+                            // var array = index.split("-");
+                            // var index_now = array[array.length-1];
+                            // console.log("index_now："+index_now);
+                            var index_now = index;
+                            div_content.find('.img-pra').each(function(){
+                                var index_list = $(this).attr('data-index');
+                                // array = index_list.split("-");
+                                // index_list = array[array.length-1];
+                                if(index_now == index_list)
+                                {
+                                    $(this).find('.layui-upload-img').attr('src',"__ROOT__/"+res.filename);
+                                    $(this).find('.modified_join').text('上传成功');
+                                }
+                            })
+                            // $(".modified_join").empty().html("上传成功");
+                        }
+                        if(res.status=="error")
+                        {
+
+                        }
+                        if(res.status=="size_error")
+                        {
+                            layer.msg("请来确认图片大小不能超过500KB");
+                            return;
+                        }
+                        if(res.status=="file_null")
+                        {
+                            layer.msg("请选择要上传的图片");
+                            return;
+                        }
+                    },
+                    error: function(index, upload){
+                        layer.closeAll('loading');
+                    }
+                });
+            });
+            //保存
+            $('#save_MallPackage').click(function () {
+                var caozuo = $('#caozuo_MallPackage').val();
+                var picture_div = $('#form_MallPackage [name="yulan_picture_more"]');
+                var content_div = $('#form_MallPackage [name="yulan_picture_content"]');
+                var picture_more = get_picture(picture_div);
+                var content = get_picture(content_div);
+                // console.log(picture_more);
+                // console.log(content);
+                $.ajax({
+                    url: '__APP__/Package/' + caozuo,
+                    data: { 
+                        id:$('#id_MallPackage').val(), 
+                        title: $('#MallPackageTitle').val(), 
+                        description: $('#MallPackageDescription').val(),
+                        picture:$('#hidden_MallPackagePicture').val(),
+                        price: $('#MallPackagePrice').val(),
+                        withdrawal:$('#MallPackageWithdrawal').val(),
+                        integral:$('#MallPackageIntegral').val(),
+                        count: $('#MallPackageCount').val(),
+                        picture_div: picture_more,
+                        content: content,
+                    },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if (msg == "error") {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                        else if (msg == "title_null") {
+                            alert("请输入礼包名称");
+                            return;
+                        }
+                        else if (msg == "id_null") {
+                            alert("请选择要修改的数据");
+                            return;
+                        }
+                        else if (msg == "picture_null") {
+                            alert("请上传图片");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+        //多图处理
+        function get_picture(obj){
+            var picture_str = "";
+            obj.find('.img-pra').each(function(index){
+                var picture = $(this).children("img").attr("src");
+                picture = picture.substr(1,picture.length-1);
+                picture_str += picture;
+                picture_str += ",";
+            })
+            if(picture_str.length>0)
+            {
+                picture_str = picture_str.substr(0,picture_str.length-1);
+            }
+            return picture_str;
+        }
+    </script>
+</body>
+</html>

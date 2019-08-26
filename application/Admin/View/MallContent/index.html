@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body >   
+    
+    <div class="easyui-layout" style="width:100%;height:100%">
+            <input type="hidden" id="MallLanmuID" name="MallLanmuID" />
+            <input type="hidden" id="MallController" name="MallController" />
+        <div data-options="region:'west',title:'栏目',split:true" style="width:200px;">
+            <div style="padding-left:20px;padding-top:20px">
+                <ul id="Mall_Tree_lanmu"></ul>
+            </div>
+        </div>   
+        <div data-options="region:'center'" style="">
+            <form id="upload_picture_form" enctype="multipart/form-data" method="post">
+                <input type="file" style=" display:none" id="uoload_picture" name="picture" />
+            </form>
+            <div id="MallContent_tabs" class="easyui-tabs" fit="true" border="0" >
+            </div>
+        </div>   
+    </div>  
+
+
+    <script type="text/javascript">
+
+        $('#Mall_Tree_lanmu').tree({
+            url: '__APP__/MallLanmu/index',
+            lines: true,
+            onSelect: function (node) {
+                var page = "MallContentManagement.html";
+                var titleMsg = "内容管理";
+                $('#MallLanmuID').val(node.id);
+                $.ajax({
+                    url: '__APP__/MallLanmu/getController',
+                    data: { "id": node.id },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "id_null") {
+                            alert("请选择一个栏目");
+                            return;
+                        }
+                        else if (msg == "data_null") {
+                            alert("该栏目不存在，请确认");
+                            return;
+                        }
+                        else {
+                            $('#MallController').val(msg);
+                            var controller = $('#MallController').val();
+                            if (controller == "Danye") {
+                                page = "MallContentDanye.html";
+                            }
+                            else if (controller == "Recruitment") {
+                                page = "MallRecruitment.html";
+                            }
+                            var IsHave = $('#MallContent_tabs').tabs('exists', titleMsg);
+                            if (IsHave) {
+                                $('#MallContent_tabs').tabs('select', titleMsg);
+                                var tab = $('#MallContent_tabs').tabs('getSelected');
+                                tab.panel('refresh', "__APP__/" + page + '?navigation_id=' + node.id);
+                            }
+                            else {
+                                $('#MallContent_tabs').tabs('add', {
+                                    title: titleMsg,
+                                    content: '<div class="easyui-panel" href="__APP__/' + page + '?navigation_id=' + node.id + '" fit="true" border="false" ></div>',
+                                    closable: true
+                                })
+                            }
+                        }
+
+                    }
+                })
+
+            }
+        });
+    </script>
+
+</body> 
+</html>

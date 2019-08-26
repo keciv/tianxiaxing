@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>确定订单</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="/public/phone/css/lpk.css" />
+		<link rel="stylesheet" href="/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/phone/css/reset.css">
+		<link rel="stylesheet" href="/public/phone/css/public.css">
+		<link rel="stylesheet" href="/public/phone/css/other.css">
+		<link rel="stylesheet" href="/public/phone/layer/layui.css">
+		<script src="/public/phone/lb/js/jquery.min.js"></script>
+		<!--<script src="/public/phone/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="/public/phone/layer/layer.js"></script>
+		<script src="/public/phone/js/rem.js"></script>
+		<style type="text/css">
+			._money text {
+				font-size: 0.45rem;
+			}
+			.fk {
+			    padding: 0.1rem 5%;
+			}
+			.fk img{
+				height: 0.5rem;
+			}
+			.order-goods .all-price {
+		    padding: 6px 15px;
+		}
+
+		.goods-top{
+			/*display: none;*/
+		}
+		.order-goods:first-child .goods-top{
+			display: block;
+		}
+		.order-goods  .y{
+			width: 74%
+		}
+		.order-goods  textarea {
+		    height: 0.8rem;
+		    border: 0;
+		    display: block;
+		    width: 100%;
+		    font-size: 0.35rem;
+		    border: 1px solid #f2f2f2;
+		    padding: 0.1rem;
+		    min-height: 2rem;
+		}
+		</style>
+	</head>
+	<body class="bj-f2">
+		
+
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a onclick="javascript :history.back(-1);">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center">
+				确认订单
+			</div>
+			<div class="fr right">
+				<!--< a href="javascript:;"><font class="glyphicon glyphicon-shopping-cart"></font></ a>-->
+			</div>
+		</header>
+		<div class="" style="width: 100%;height: 1.5rem;"></div>
+
+		<div class="order-consumer">
+			<div class="info">
+				<h3>收货人：<span> </span></h3>
+				<h4></h4>
+			</div>
+			<div class="address">
+				<p>收货地址：</p>
+				<a href="Address.html?id=1">
+					<font class="glyphicon glyphicon-menu-right"></font>
+				</a>
+			</div>
+		</div>
+		<section class="lpkproduct">
+
+		</section>
+		
+		<div class="order-bot">
+			<div class="all-price">
+				<i>合计：</i>
+				<span style="line-height: 0.5rem;display: inline-block;padding: 0.17rem 0;vertical-align: middle;">￥
+					<font id="hj"></font>元
+				</span>
+			</div>
+			<div class="submit">提交订单</div>
+		</div>
+
+		<div class="true_tk">
+			<div class="_mian">
+				<h3>确认付款 <span class="glyphicon glyphicon-remove"></span></h3>
+				<div class="_money">
+					<text>￥</text>
+					<font id="jq"></font>
+				</div>
+				
+				 <div class="fkfs">
+					<a href="javascript:;">付款方式：</a>
+				</div>
+				<p class="fk" >
+					<input type="radio" name="fk" id="fk1" value="weixin" /><label for="fk1"><img src="/public/phone/img/wx.png"/></label>
+				</p> 
+				<!-- <p class="fk" >
+					<input type="radio" name="fk" id="fk2" value="alipay" /><label for="fk2"><img src="/public/phone/img/zfb.png"/></label>
+				</p>  -->
+				<!-- <p class="fk" >
+					<input type="radio" name="fk" id="fk3" value="commission" /><label for="fk3">可用余额(<span>99.00</span>)</label>
+				</p>  -->
+				
+					
+			 <br />
+				<div class="true_fkfs">
+					<a>确认付款</a>
+				</div>
+			</div>
+		</div>
+		<div id="orderID" style="display:none"></div>
+		<div class="" style="height: 1.5rem;"></div>
+	</body>
+	<script type="text/javascript">
+		$('.true_tk ._mian h3 span').click(function() {
+			$('.true_tk').slideUp(200)
+		})
+
+		var member_id = "{$member_id}";
+		var lpkint = ""
+
+		var urlStr = decodeURI(location.href).split("?")[1];
+		var urlData = urlStr.split("&");
+		var lpkzhi, lpkname, idData;
+
+		var array_data = [];
+		var lpkphone, lpkaddress;
+		var lpkzhi = '';
+		urlData.forEach(item => {
+			var dataArrItem = item.split("=")
+			switch(dataArrItem[0]) {
+				case 'back':
+					lpkzhi = dataArrItem[1];
+					break;
+				case 'id':
+					idData = dataArrItem[1];
+					break;
+				case 'name':
+					lpkname = dataArrItem[1];
+					break;
+				case 'phone':
+					lpkphone = dataArrItem[1];
+					break;
+				case 'address':
+					lpkaddress = dataArrItem[1];
+					break;
+			}
+		})
+		console.log("lpkint："+lpkint);
+
+		if(lpkzhi == 5) {
+			$('.order-consumer .info h3 span').text(lpkname);
+			$('.order-consumer .info h4').text(lpkphone);
+			$('.order-consumer .address p').text(lpkaddress);
+			$('.order-consumer .address p').attr('id', idData);
+
+			var lpkcc = localStorage.getItem("lpkcook");
+			var orderArr = [];
+			var orderStr = '';
+			$.ajax({
+				type: "post",
+				url: "/app.php/Order/sure_order",
+				dataType: 'json',
+				data: {
+					order_product: lpkcc,
+					member_id: member_id
+				},
+				success: function(data) {
+					if(data.code == '200') {
+						var result = '';
+						var data_address = data.data.address;
+						if(data_address) {
+							$('.order-consumer .info h3 span').text(data.data.address.name);
+							$('.order-consumer .info h4').text(data.data.address.phone);
+							var address = data.data.address.province + data.data.address.city + data.data.address.district + data.data.address.address
+							$('.order-consumer .address p').text(address);
+							$('.order-consumer .address p').attr('id', data.data.address.id);
+						}
+
+						$('#hj').text(data.data.total_yuan);
+
+						var shops = data.data.shops;
+
+						if(shops.length>0)
+						{
+							for(var j=0;j<shops.length;j++)
+							{
+								result = "";
+								var shop = shops[j];
+								var product = shop.rows;
+								var lpkstr = '';
+								console.log(product);
+								product.forEach(fn => {
+									var obj = {};
+									obj.id = fn.id;
+									obj.store_id = shop.store_id;
+									obj.count = fn.count;
+									obj.spec = fn.spec;
+									orderArr.push(obj);
+								})
+								var product_html = "";
+								for(var i = 0; i < product.length; i++) {
+									var row = product[i];
+
+									var jsonObj = row.spec;
+									var newjsonObj = "";
+									if(jsonObj)
+									{
+										var newjsonObj = jsonObj;
+										var newStr = '';
+										for(var prop in newjsonObj) {
+											newStr += newjsonObj[prop] + '  ';
+										}
+										// newjsonObj = JSON.parse(jsonObj)
+									}
+
+									product_html += `
+										<li class="goods-item">
+											
+											<div class="goods-info" id=${row.id} >
+												<div class="goods-img">
+													<img src= ${row.picture} />
+												</div>
+												<div class="goods-style">
+													<h3>${row.title}</h3>
+													<h6>${newStr}</h6>
+													<div class="price">
+														<span>¥ <text class='shop_num'>${row.yuan}</text></span>
+														<p>
+															<font class="glyphicon glyphicon-minus min"></font>
+															<span class="shul">${row.count}</span>
+															<font class="glyphicon glyphicon-plus add"></font>
+														</p>
+													</div>
+												</div>
+											</div>
+											
+										</li>`;
+								}
+								result += `
+									<div class="order-goods">
+										<div class="goods-top">
+											<span><img src="/public/phone/img/shoptop.png"/>&nbsp;&nbsp;<font>${shop.store_name}</font></span>
+										</div>
+										<ul class="goods-list">
+											
+											${product_html}
+											<!--<div class="lY classification clearfix">
+												<div class="fl l">
+													买家留言：
+												</div>
+												<div class="fl y">
+													<textarea name="" placeholder="选填：填写内容和卖家协商确认"></textarea>
+												</div>
+											</div>-->
+										</ul>
+										<div class="all-price">
+											<h4>运费：<span>￥<font class="yunfei">${shop.yunfei}</font></span> 
+											</h4>
+										</div>
+										
+										<div class="all-price">
+											<h4>满<span>￥<font class="mianyou">${shop.mianyou}</font></span> 包邮
+											</h4>
+										</div>
+										
+										<div class="all-price">
+											<p>共<font class="xiaoji_num">${shop.xiaoji_num}</font>件商品</p>
+											<h4>小计：
+												<span>￥
+													<font class="xiaoji_yuan">${shop.xiaoji_yuan}</font>
+												</span>
+											</h4>
+										</div>
+									</div>`;
+								$('.lpkproduct').append(result);
+							}
+							
+						}
+						$('#keyong_integral').text(data.data.member.integral);
+						lpk(orderArr);
+					} 
+					else if(data.code == "400") {
+						layer.msg(data.msg, {
+							time: 2000
+						}, function() {
+							window.location.href = "/login.html";
+						})
+					} 
+					else {
+						layer.msg(data.msg);
+					}
+				}
+			});
+
+		} 
+		else if(lpkzhi == 0) {
+
+			$(function() {
+				var urlStr = decodeURI(location.href).split("?")[1];
+				var urlData = urlStr.split("&");
+				var objData, idData;
+				var array_data = [];
+				var backPage;
+				urlData.forEach(item => {
+					var dataArrItem = item.split("=")
+					switch(dataArrItem[0]) {
+						case 'back':
+							backPage = dataArrItem[1];
+							break;
+						case 'obj':
+							objData = dataArrItem[1];
+
+							break;
+						case 'member_id':
+							idData = dataArrItem[1];
+							break;
+					}
+				})
+				lpkint = objData;
+				localStorage.setItem("lpkcook", lpkint);
+				console.log("lpkint:");
+				console.log(lpkint);
+
+				var orderArr = [];
+				var orderStr = '';
+				$.ajax({
+					type: "post",
+					url: "/app.php/Order/sure_order",
+					dataType: 'json',
+					data: {
+						order_product: lpkint,
+						member_id: member_id
+					},
+					success: function(data) {
+						if(data.code == '200') {
+							var result = '';
+							var data_address = data.data.address;
+							if(data_address) {
+								$('.order-consumer .info h3 span').text(data.data.address.name);
+								$('.order-consumer .info h4').text(data.data.address.phone);
+								var address = data.data.address.province + data.data.address.city + data.data.address.district + data.data.address.address
+								$('.order-consumer .address p').text(address);
+								$('.order-consumer .address p').attr('id', data.data.address.id);
+							}
+
+							$('#hj').text(data.data.total_yuan);
+							$('#hjjf').text(data.data.total_jifen);
+
+							var shops = data.data.shops;
+
+							if(shops.length>0)
+							{
+								for(var j=0;j<shops.length;j++)
+								{
+									result = "";
+									var shop = shops[j];
+									var product = shop.rows;
+									var lpkstr = '';
+									console.log(product);
+									product.forEach(fn => {
+										var obj = {};
+										obj.id = fn.id;
+										obj.store_id = shop.store_id;
+										obj.count = fn.count;
+										obj.spec = fn.spec;
+										orderArr.push(obj);
+									})
+									var product_html = "";
+									for(var i = 0; i < product.length; i++) {
+										var row = product[i];
+
+										var jsonObj = row.spec;
+										var newjsonObj = "";
+										if(jsonObj)
+										{
+											var newjsonObj = jsonObj;
+											var newStr = '';
+											for(var prop in newjsonObj) {
+												newStr += newjsonObj[prop] + '  ';
+											}
+											// newjsonObj = JSON.parse(jsonObj)
+										}
+
+										product_html += `
+											<li class="goods-item">
+												
+												<div class="goods-info" id=${row.id} >
+													<div class="goods-img">
+														<img src= ${row.picture} />
+													</div>
+													<div class="goods-style">
+														<h3>${row.title}</h3>
+														<h6>${newStr}</h6>
+														<div class="price">
+															<span>¥ <text class='shop_num'>${row.yuan}</text></span>
+															<p>
+																<font class="glyphicon glyphicon-minus min"></font>
+																<span class="shul">${row.count}</span>
+																<font class="glyphicon glyphicon-plus add"></font>
+															</p>
+														</div>
+													</div>
+												</div>
+												
+											</li>`;
+									}
+									result += `
+										<div class="order-goods">
+											<div class="goods-top">
+												<span><img src="/public/phone/img/shoptop.png"/>&nbsp;&nbsp;<font>${shop.store_name}</font></span>
+											</div>
+											<ul class="goods-list">
+												
+												${product_html}
+												<!--<div class="lY classification clearfix">
+													<div class="fl l">
+														买家留言：
+													</div>
+													<div class="fl y">
+														<textarea name="" placeholder="选填：填写内容和卖家协商确认"></textarea>
+													</div>
+												</div>-->
+											</ul>
+											<div class="all-price">
+												<input type="hidden" name="yunfei" value="${shop.shop_yunfei}" />
+												<h4>运费：<span>￥<font class="yunfei">${shop.yunfei}</font></span> 
+												</h4>
+											</div>
+											
+											<div class="all-price">
+												<h4>满<span>￥<font class="mianyou">${shop.mianyou}</font></span> 包邮
+												</h4>
+											</div>
+											
+											<div class="all-price">
+												<p>共<font class="xiaoji_num">${shop.xiaoji_num}</font>件商品</p>
+												<h4>小计：
+													<span>￥
+														<font class="xiaoji_yuan">${shop.xiaoji_yuan}</font>
+													</span>
+												</h4>
+											</div>
+										</div>`;
+									$('.lpkproduct').append(result);
+								}
+								
+							}
+							$('#keyong_integral').text(data.data.member.integral);
+							lpk(orderArr);
+						} 
+						else if(data.code == "400") {
+							layer.msg(data.msg, {
+								time: 2000
+							}, function() {
+								window.location.href = "/login.html";
+							})
+						} 
+						else {
+							layer.msg(data.msg);
+						}
+					}
+				});
+
+			})
+
+		}
+
+		function lpk(fn) {
+			orderArr = fn
+			//			加
+			$(".order-goods").on("click", ".add", function() {
+				//自身加1
+				var t = $(this).parent().find('span');
+				t.text(parseInt(t.text()) + 1);
+				xiaoji($(this));
+			});
+			$(".order-goods").on("click", ".min", function(event) {
+				//				减1
+				var t = $(this).parent().find('span');
+				if(t.text() <= 1) {
+					layer.msg("已经是最小值了");
+					return;
+				}
+				t.text(parseInt(t.text()) - 1);
+				xiaoji($(this));
+			})
+
+			$('.order-bot').on('click', '.submit', function() {
+				var address_id = $('.order-consumer .address p').attr('id');
+				var message = $('.lY .y input').val();
+				var totle = $('#hj').text();
+
+				$('#jq').text(totle);
+				orderStr = JSON.stringify(orderArr);
+				$.ajax({
+					type: "post",
+					url: '/app.php/Order/add',
+					dataType: 'json',
+					data: {
+						member_id: member_id,
+						address_id: address_id,
+						order_product: orderStr,
+						message: message,
+					},
+					success: function(data) {
+						console.log(data)
+						if(data.code == "200") {
+							$('.true_tk').slideDown(200)
+							$('#orderID').html(data.data.order_id);
+							layer.msg(data.msg, {
+								time: 2000
+							}, function() {
+								// window.location.href = "order.html";
+							});
+						} else if(data.code == "400") {
+							layer.msg(data.msg, {
+								time: 2000
+							}, function() {
+								window.location.href = "/login.html";
+							})
+						} 
+						else if(data.code == "404") {
+							layer.msg("订单出现问题，请重新操作", {
+								time: 2000
+							}, function() {
+								window.location.href = "/index.html";
+							})
+						} 
+						else if(data.code == "501") {
+							layer.msg(data.msg, {
+								time: 2000
+							})
+						} 
+						else {
+							layer.msg(data.msg);
+						}
+					}
+				})
+
+			})
+
+		}
+
+		$("._mian").on("click", ".true_fkfs", function(event) {
+			
+			var order_id = $('#orderID').html();
+			var fukuan_type = $("input[name='fk']:checked").val();
+
+
+			if(fukuan_type=="weixin")
+			{
+				$.ajax({
+					url:'/app.php/WeixinPay/get_Parameters',
+					data:{"orderID":order_id},
+					type:'get',
+					dataType:"json",
+					success:function(data){
+						// layer.msg(data.code);
+						if(data.code=="200")
+						{
+							window.location.href = data.data.mweb_url;
+						}
+						else
+						{
+							layer.msg(data.msg);
+						}
+					} 
+				})
+			}
+			else
+			{
+				layer.msg("请选择支付方式");
+			}
+		})
+
+		function xiaoji(obj){
+			var product_xiaoji_yuan = 0;
+			var product_xiaoji_jifen = 0;
+			var xiaoji_num = 0;
+			$(obj).parents('.goods-list').find('.goods-item').each(function(){
+				var product_yuan = $(this).find('.shop_num').text();
+				var count = $(this).find('.shul').text();
+
+				product_xiaoji_yuan += product_yuan * count;
+				xiaoji_num += Number(count);
+			})
+
+			var yunfei_obj = $(obj).parents('.order-goods').find('.yunfei');
+			var mianyou_obj = $(obj).parents('.order-goods').find('.mianyou');
+			if(product_xiaoji_yuan>Number(mianyou_obj.text()))
+			{
+				yunfei = 0;
+				$(obj).parents('.order-goods').find('.yunfei').text("0.00");
+			}
+			else
+			{
+				yunfei = $(obj).parents('.order-goods').find('[name="yunfei"]').val();
+				$(obj).parents('.order-goods').find('.yunfei').text(yunfei);
+			}
+
+			var store_xiaoji_yuan = Number(product_xiaoji_yuan) + Number(yunfei);
+
+			$(obj).parents('.order-goods').find('.xiaoji_num').text(xiaoji_num);
+			$(obj).parents('.order-goods').find('.xiaoji_yuan').text(store_xiaoji_yuan);
+
+			heji();
+		}
+
+		function heji(){
+			var zongji_yuan = 0;
+			var zongji_jifen = 0;
+			$('.order-goods').each(function(){
+				var xiaoji_yuan = $(this).find('.xiaoji_yuan').text();
+				zongji_yuan += Number(xiaoji_yuan);
+			})
+
+			$('#hj').text(zongji_yuan.toFixed(2));
+			$('#jq').text(zongji_yuan.toFixed(2));
+		}
+	</script>
+
+</html>

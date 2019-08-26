@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://www.sucaihuo.com/jquery/29/2925/demo/ -->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title></title>
+    </head>
+
+    <body>
+        <style>
+            .shuxing{margin: 10px;}
+            .shuxing:after{
+            content: ".";      
+            display: block;       
+            clear: both;          
+            visibility: hidden;   
+            line-height: 0;      
+            height: 0;          
+            font-size:0;  
+            }
+            .goodsAdd {
+                width: 55%;
+                float: left;
+            }
+            .goodsAdd input {
+                text-align: center;
+            }
+            
+            .goodsAdd .goodsType {
+                width: 100%;
+            }
+            
+            .goodsAdd .goodsType .goodsTypeItem {
+                width: 100%;
+                min-height: 35px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+            
+            .goodsAdd .goodsType .goodsTypeItem button {
+                margin-left: 10px;
+                background-color: #DDDDDD;
+                height: 32px;
+                line-height: 16px;
+                border: none;
+                border-radius: 2px;
+                padding: 10px;
+            }
+            
+            .goodsAdd .goodsType .goodsTypeItem .active {
+                background-color: #449D44;
+                color: #fff;
+            }
+            
+            .goodsAdd .goodsLists {
+                border-collapse: collapse;
+            }
+            
+            .goodsAdd .goodsLists td,
+            .goodsAdd .goodsLists th {
+                border: 1px solid #f4f4f4;
+                line-height: 40px;
+                padding: 0 4px;
+            }
+            
+            .goodsAdd .submit {
+                position: fixed;
+                right: 10%;
+                top: 50%;
+            }
+            .sx_list{width: 42%; float: right; text-align: left;}
+            .shuxing .tit{width: 100%; height: 50px;line-height: 50px;font-weight: bold;font-size: 16px;}
+            .sx_list .list{width: 100%; line-height: 30px;}
+            .sx_list .list p{}
+            .sx_list .list p label{display: inline-block; width: 80px;font-weight: bold;}
+            .sx_list .list p input{width: 300px; height: 26px;line-height: 26px; text-align: left; text-indent: 10px;}
+            .sx_list .list p textarea{width: 300px; line-height: 26px;}
+            @media(min-width: 1400px){
+                .goodsAdd .goodsLists td,
+                .goodsAdd .goodsLists th {
+                    padding: 0 18px;
+                }
+
+            }
+            @media(min-width: 1600px){
+                .goodsAdd .goodsLists td,
+                .goodsAdd .goodsLists th {
+                    padding: 0 30px;
+                }
+                
+            }
+        </style>
+        <div class="shuxing">
+            <p>选择模型：<input id="product_select_model" name="dept"> </p>
+            <br>
+            <div class="goodsAdd">
+                <div class="tit">商品规格：</div>
+                <div class="goodsType"></div>
+                <table id="table_Characteristic" class="goodsLists"></table>
+                
+            </div>
+            <div class="sx_list" id="product_set_attr">
+                <div class="tit">商品属性：</div>
+                <div class="list">
+                    <!-- 
+                    <p><label>生产地：</label><input type="text"></p>
+                    <p><label>保证期：</label><input type="text"></p>
+                    <p><label>规&nbsp;&nbsp;则&nbsp;：</label><textarea></textarea></p>
+                    -->
+                </div>
+            </div>
+            <div style="clear:both;height:20px;"></div>
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" id="save_product_characteristic">保存</a>
+            <form style="display: none;" id="form_MallCharacteristicPicture" method="post" enctype="multipart/form-data">
+                <input type="file" id="CharacteristicPicture" name="CharacteristicPicture"/>
+                <input type="text" id="hidden_CharacteristicPicture" name="hidden_CharacteristicPicture"/>
+            </form> 
+        </div>
+        <script type="text/javascript">
+            var subData = {};
+            var showData = [];
+            var goodsType = $(".goodsType");
+            /* 把类型数据渲染出来 */
+            function renderType(Characteristic) {
+                console.log("Characteristic："+Characteristic);
+                for(var i=0;i<Characteristic.length;i++)
+                {
+                    console.log(goodsType.html());
+                    var str = "";
+                    var addPicture = "";
+                    //console.log("i："+i);
+                    var every = Characteristic[i];
+                    addPicture = '<img src="__ROOT__/public/admin/image/ico_add_picture.png" name="upload_CharacteristicPicture" style="width:30px;height:30px" />';
+                    for(var e in every) {
+                        str += "<b>" + e + "：</b>";
+                        for(var j = 0, len = every[e].length; j < len; j++) {
+                            str += `<button onclick="select(this,'${e}','${every[e][j]}')">${every[e][j]}</button>${addPicture}`;
+                            // console.log("e值：" + every[e][j])
+                        }
+                    }
+
+                    goodsType.append("<div class='goodsTypeItem'>" + str + "</div>");
+                }
+
+                return true;
+            }
+
+            //点击商品类型效果
+            function select(ele, e, val) {
+                // console.log("ele:"+ele);
+                // console.log("e:"+e);
+                // console.log("val:"+val);
+                
+                if(ele.className == "") {
+                    ele.className = "active";
+                    typeAdd(e, val);
+                } else if(ele.className == "active") {
+                    ele.className = "";
+                    typeDel(e, val);
+                }
+            }
+
+            //增加一个类别
+            function typeAdd(e, val) {
+                var exist = false;
+                for(var type in subData) {
+                    if(type == e) {
+                        exist = true;
+                        subData[type].push(val);
+                    }
+                }
+                if(exist == false) {
+                    subData[e] = [];
+                    subData[e].push(val);
+                }
+                // console.log("subData:"+JSON.stringify(subData));
+                renders(subData)
+            }
+
+            //删除一个类别
+            function typeDel(e, val) {
+                for(var type in subData) {
+                    if(type == e) {
+                        for(var i = 0, len = subData[type].length; i < len; i++) {
+                            if(subData[type][i] == val) {
+                                subData[type].splice(i, 1)
+                            }
+                        }
+                    }
+                }
+                renders(subData)
+            }
+
+            //根据最终数据, 渲染页面
+            function renders(data) {
+                console.log("data:"+JSON.stringify(data));
+                showData = [];
+                /* 排序, 类型少的在前 */
+                var sort = [];
+                for(var key in data) {
+                    if(data[key].length != 0) {
+                        sort.push(data[key].length)
+                    }
+                }
+                // console.log(sort);
+                sort.sort();
+                var length = sort.length;
+                for(var i = 0; i < length; i++) {
+                    for(var key in data) {
+                        if(data[key].length == sort[0]) {
+                            var obj = {};
+                            obj.key = key;
+                            obj.val = data[key];
+                            showData.push(obj)
+                            sort.shift();
+                        }
+                    }
+                }
+
+                /* 排序结束 */
+                var nums = 1;
+                for(var key in data) {
+                    nums = data[key].length * nums;
+                }
+                console.log("showData:"+showData);
+                var th = "<tr>";
+                var showArr = [];
+                for(var i = 0, len = showData.length; i < len; i++) {
+                    th += "<th>" + showData[i].key + "</th>";
+                    // th += "<th style='display:none'>" + showData[i].key+ "_图" + "</th>";
+                    showArr.push(showData[i].val);
+                    // console.log(th);  <tr><th>颜色</th>
+                }
+                console.log("showArr:"+showArr);
+                th += "<th>游客价</th><th>会员价</th><th>店铺价</th><th>库存</th>";
+                th += " </tr>";
+                // console.log(th);
+                /* 将商品转换为dom节点 */
+                for(var i = 0, len = showData.length; i < len; i++) {
+                    var data = showData[i].val;
+                    showData[i].dom = [];
+                    for(var j = 0, length = data.length; j < length; j++) {
+                        var str = "<td>" + data[j] + "</td>";
+                        // var str_picture = "<td style='display:none'></td>";
+                        // showData[i].dom.push(str+str_picture);
+                        showData[i].dom.push(str);
+                    }
+                    console.log(showData[i].dom);
+                }
+
+                /* 将dom元素一一合并 */
+                var doms = showData[0].dom;
+                for(var i = 1, len = showData.length; i < len; i++) {
+                    doms = matching(doms, showData[i].dom)
+                }
+                console.log("doms:"+doms);
+                // return;
+                var tbody = "";
+                for(var i = 0, len = doms.length; i < len; i++) {
+                    //alert(doms[i]);
+                    var str = "<tr>" + doms[i] + 
+                        "<td><input type='text' /></td>"+
+                        "<td><input type='text' /></td>"+
+                        "<td><input type='text' /></td>"+
+                        "<td><input type='text' /></td>"+
+                        "</tr>";
+                    tbody += str;
+                }
+                if(showData.length){
+                    var goodsLists = document.querySelector(".goodsLists");
+                goodsLists.innerHTML = th + tbody;
+                    
+                }else{
+                     document.querySelector(".goodsLists").innerHTML="";
+                }
+                table_rowspan(".goodsLists",1);
+                // table_rowspan(".goodsLists",2);
+                // table_rowspan(".goodsLists",3);
+            }
+
+
+            function table_rowspan(table_id, table_colnum) {
+                
+                table_firsttd = "";
+                table_currenttd = "";
+                table_SpanNum = 0;
+                table_Obj = $(table_id + " tr td:nth-child(" + table_colnum + ")");
+                
+                table_Obj.each(function (i) {
+                    if (i == 0) {
+                        table_firsttd = $(this);
+                        table_SpanNum = 1;
+                    } 
+                    else {
+                        table_currenttd = $(this);
+                        if (table_firsttd.text() == table_currenttd.text()) { //这边注意不是val（）属性，而是text（）属性
+                            //td内容为空的不合并
+                            if(table_firsttd.text() !=""){
+                                table_SpanNum++;
+                                table_currenttd.hide(); //remove();
+                                table_firsttd.attr("rowSpan", table_SpanNum);
+                            }
+                        } else {
+                            table_firsttd = $(this);
+                            table_SpanNum = 1;
+                        }
+                    }
+                })
+            }
+            //将两个数组内的每个元素一一匹配 (数组元素为字符串)
+            function matching(arr1, arr2) {
+                var arr = [];
+                for(var i = 0, len = arr1.length; i < len; i++) {
+                    for(var j = 0, length = arr2.length; j < length; j++) {
+                        var str = arr1[i] + arr2[j];
+                        arr.push(str);
+                    }
+                }
+                return arr;
+            }
+            function loadCharacteristicPicture(object){
+                var pictureSrc = $('#hidden_CharacteristicPicture').val();
+                if(pictureSrc.length>0)
+                {
+                    $(object).attr('src',"__ROOT__/"+pictureSrc);
+                    //图片所属规格值
+                    var belongValue = $(object).prev().html(); 
+                    console.log("图片所属规格值："+belongValue);
+                    //图片所属规格
+                    var belongName = $(object).parents('.goodsTypeItem').find('b').html();
+                    belongName = belongName.substr(0,belongName.length-1);
+                    console.log("图片所属规格："+belongName);
+
+                    var belongName_index="";
+                    var save_index="";
+                    $('#table_Characteristic').find('tr:eq(0) th').each(function(index){
+                        var thText=$(this).html();
+                        console.log(thText);
+                        if(thText==belongName)
+                        {
+                            belongName_index = index;
+                            console.log("belongName_index："+belongName_index);
+                            return false;
+                        }
+                    })
+                }
+            }
+        </script>
+        <script type="text/javascript">
+            $(function(){
+                //上传图片的单击事件
+                $(document).off('click',"[name='upload_CharacteristicPicture']");
+                //产品信息
+                var id = "{$product.id}";
+
+                var model_id = "{$product.model_id}";
+                var model = "{$product.model}";
+                // console.log(model);
+                var product_spec = '{$product.spec}';
+                // var product_spec = '[{"大小":"X","颜色":"红色","大小_图":"","颜色_图":"","原价":"100","现价":"25","库存":"4"}]';
+                // console.log("产品规格：" + product_spec);
+                var product_attr = '{$product.attr}';
+                console.log("product_attr:"+product_attr);
+
+                var model_spec = '{$model_spec}';
+                // console.log("spec:"+spec);
+                if(model_spec.length>0)
+                {
+                    model_spec = JSON.parse(model_spec);
+                }
+                
+                var model_attr = '{$model_attr}';
+                // console.log(attr);
+                // attr = JSON.parse(attr);
+                
+                //模型选择
+                $('#product_select_model').combobox({    
+                    url:'__APP__/MallProductModel/getModelList',    
+                    valueField:'id',
+                    textField:'text',
+                    onChange:function(newValue,oldValue){
+                        // console.log("值改变了");
+
+                        $('.goodsType').html("");
+                        $('.goodsLists').html("");
+                        $('#product_set_attr .list').html("");
+
+                        if(newValue==model_id||newValue==model)
+                        {
+                            console.log("选择了相同的模型");
+                            
+                            renderType(model_spec);
+                            load_spec(product_spec);
+                            load_attr(model_attr,product_attr);
+                        }
+                        else
+                        {
+                            console.log("选择了不同的模型");
+                            
+                            $.ajax({
+                                url:'__APP__/MallCharacteristic/get_model_spec',
+                                // url:'__APP__/Index/ceshi',
+                                data:{model_id:newValue},
+                                type:'get',
+                                dataType:'json',
+                                success:function(data){
+                                    // console.log("规格：" + JSON.stringify(data));
+                                    //渲染规格
+                                    var strCharacteristic="";
+                                    strCharacteristic+="["; 
+                                    for(var i = 0;i<data.length;i++)
+                                    {
+                                        strCharacteristic+="{"; 
+                                        var value = data[i].values.split(',');
+                                        strCharacteristic+="'"; 
+                                        strCharacteristic+=data[i].spec; 
+                                        strCharacteristic+="'"; 
+                                        strCharacteristic+=":"; 
+                                        strCharacteristic+="["; 
+                                        //console.log("Value长度："+value.length);
+                                        if(value.length>0)
+                                        {
+                                            for(var j=0;j<value.length;j++)
+                                            {
+                                                if(value[j].length>0)
+                                                {
+                                                    strCharacteristic+="'"; 
+                                                    strCharacteristic+=value[j]; 
+                                                    strCharacteristic+="'"; 
+                                                    strCharacteristic+=","; 
+                                                }
+                                            }
+                                            strCharacteristic = strCharacteristic.substr(0,strCharacteristic.length-1);
+                                        }
+                                        strCharacteristic+="]"; 
+                                        strCharacteristic+="}"; 
+                                        strCharacteristic+=","; 
+                                    }
+                                    
+                                    strCharacteristic = strCharacteristic.substr(0,strCharacteristic.length-1);
+                                    strCharacteristic+="]";
+                                    strCharacteristic = strCharacteristic.replace(/'/g, '"');
+                                    // console.log("strCharacteristic(规格解析)：" + strCharacteristic);
+                                    var Characteristic = JSON.parse(strCharacteristic);
+                                    // console.log("Characteristic："+Characteristic);
+                                    renderType(Characteristic);
+                                    //表格价格
+                                }
+                            })
+                            $.ajax({
+                                url:'__APP__/MallCharacteristic/get_model_attr',
+                                data:{model_id:newValue},
+                                type:'get',
+                                dataType:'json',
+                                success:function(data){
+                                    renderAttr(data);
+                                }
+                            })
+                        }
+                    }
+                }); 
+                //选中模型
+                if(model_id>0)
+                {
+                    $('#product_select_model').combobox("setValue",model_id);
+                }
+                
+                //绑定上传图片事件
+                $(document).on("click","[name='upload_CharacteristicPicture']",function(){
+                    nowClickAddPicture=$(this);
+                    $('#CharacteristicPicture').click();
+                    
+                })
+                // 上传规格图
+                $('#CharacteristicPicture').change(function(){
+                    var options = {
+                        url: "__APP__/Upload/upload",
+                        data: { "filePath": "public/upload/Characteristic/",fileID:"CharacteristicPicture" },
+                        type:'post',
+                        dataType:'json',
+                        success: function (data) {
+                            $('#hidden_CharacteristicPicture').val(data.filename);
+                            if (data.status=="ok") {
+                                layer.msg("上传成功");
+                                //alert(nowClickAddPicture);
+                                loadCharacteristicPicture(nowClickAddPicture);
+                            }
+                            else if (data.status=="null") {
+                                alert("文件格式有误");
+                            }
+                            else if (data.status=="error"){
+                                 alert("上传失败，请重新上传");
+                            }
+                        }
+                    };
+                    $('#form_MallCharacteristicPicture').ajaxSubmit(options);
+                })
+                //保存
+                $('#save_product_characteristic').click(function(){
+                    //规格
+                    var th = $("#table_Characteristic tr th");
+                    var thArray = new Array();
+                    var trArray = new Array();
+                    
+                    for(var i=0;i<th.length;i++)
+                    {
+                        var thHtml = $(th[i]).html();
+                        thArray.push(thHtml);
+                    }
+                    
+                    console.log("th:"+thArray);
+                    var tr = $("#table_Characteristic tr");
+                    for(var i=1;i<tr.length;i++)
+                    {
+                        var tdArray = new Array();
+                        var td = $(tr[i]).find('td');
+                        console.log(td.length);
+                        for(j=0;j<td.length;j++)
+                        {
+                            if(j<(td.length-4))
+                            {
+                                var tdHtml = $(td[j]).html();
+                            }
+                            else
+                            {
+                                var tdHtml = $(td[j]).find("input").val();
+                            }
+                            tdArray.push(tdHtml);
+                            //trArray.push(tdArray);
+                        }
+                        //console.log("td:"+tdArray);
+                        trArray.push(tdArray);
+                    }
+                    console.log("trArray:"+trArray);
+                    //产品规格图
+                    var spec_pictures = [];
+                    var spec_array = $('.goodsType').find('.goodsTypeItem');
+                    console.log("规格个数："+spec_array.length);
+                    for(var i = 0;i<spec_array.length;i++)
+                    {
+                        var spec_str = spec_array[i];
+                        console.log(spec_str);
+                        var spec_key = $(spec_str).find('b').text();
+                        console.log("spec_key:" + spec_key);
+                        var spec_values = $(spec_str).find(':button');
+                        console.log("spec_values:"+$(spec_values).length);
+                        var array = [];
+                        for (var j = 0; j < spec_values.length; j++) {
+                            var spec_value = $(spec_values[j]).text();
+                            var spec_picture = $(spec_values[j]).next().attr('src');
+                            console.log("spec_value："+spec_value);
+                            console.log("spec_picture："+spec_picture);
+                            var obj = {};
+                            obj[spec_value] = spec_picture;
+                            array.push(obj);
+                        }
+                        var spec = {};
+                        spec[spec_key] = array;
+                        spec_pictures.push(spec);
+                    }
+                    console.log(spec_pictures);
+                    //属性
+                    var attr_obj = {};
+                    $('#product_set_attr .list').find('p').each(function(){
+                        var attr_key = $(this).children('label').text();
+                        var attr_value = $(this).children(':input').val();
+                        console.log("attr_key:"+attr_key);
+                        console.log("attr_value:"+attr_value);
+                        attr_obj[attr_key] = attr_value;
+                    })
+                    $.ajax({
+                        url:'__APP__/MallProduct/save_Characteristic',
+                        data:{id:id,name:thArray,value:trArray,spec_picture:spec_pictures,attr:attr_obj,model_id:$('#product_select_model').combobox('getValue')},
+                        type:'post',
+                        success:function(msg){
+                            if(msg=="ok")
+                            {
+                                alert("恭喜，保存成功");
+                            }
+                            else
+                            {
+                                alert("抱歉，保存失败，请重新保存");
+                            }
+                        }
+                    })
+                })
+            })
+            
+            function load_spec(product_spec){
+                console.log("加载数据："+product_spec);
+                //规格对象
+                var object_characteristic="";
+                //规格键值
+                var characteristic_key = new Array();
+                //该产品是否有规格及模型
+                if(product_spec.length>0)
+                {
+                    //json转对象
+                    object_characteristic = eval('('+product_spec+')');
+                    // console.log("object_characteristic："+object_characteristic);
+                    if(object_characteristic.length>0)
+                    {
+                        characteristic_key = Object.keys(object_characteristic[0]);
+                        // console.log("characteristic_key:"+characteristic_key);
+                    }
+                    //规格的个数(图的列数)
+                    var picture_length = (characteristic_key.length-3)/2;
+                    var spec_key = $('.goodsTypeItem').find('b').text();
+                    // console.log(spec_key);
+
+                    // console.log("picture_length:"+picture_length);
+                    
+                    //产品各规格信息
+                    var th = "<tr>";
+                    var tr = "";
+                    for(var i=0;i<object_characteristic.length;i++)
+                    {
+                        if(i==0)
+                        {  
+                            for(var z=0;z<characteristic_key.length;z++)
+                            {
+                                var key = characteristic_key[z];
+                                if(key.indexOf("_图") == -1)
+                                {
+                                    // console.log("不是图");
+                                    th += "<th>" + characteristic_key[z] + "</th>";
+                                }
+                            }
+                        }
+                        tr +="<tr>";
+                        //console.log("keys"+keys);
+                        for(var j=0;j<characteristic_key.length;j++)
+                        {
+                            //console.log("j:"+j);
+                            var key = characteristic_key[j];
+                            //alert(object_characteristic[i][key]);
+                            if(j<characteristic_key.length-4)
+                            {
+                                // console.log(j);
+                                if(key.indexOf("_图") == -1)
+                                {
+                                    // console.log("不是图");
+                                    tr += "<td>"+object_characteristic[i][key]+"</td>";
+                                }
+                            }
+                            else
+                            {
+                                // console.log(j);
+                                tr += "<td><input type='text' value='"+object_characteristic[i][key]+"' /></td>";
+                            }
+                        }
+                        tr +="</tr>";
+                    }
+                    th += "</tr>";
+                    // console.log("th：" + th);
+                    // console.log("tr：" + tr);
+                    $('.goodsLists').append(th);
+                    $('.goodsLists').append(tr);
+                    table_rowspan(".goodsLists",1);
+                }
+            }
+            function load_attr(model_attr,product_attr){
+                //规格对象
+                // console.log(model_attr);
+                if(model_attr)
+                {
+                    var object_attr = eval('('+model_attr+')');
+                    
+                    // console.log("product_attr:"+product_attr);
+                    var attr_html = "";
+                    for(var i=0;i<object_attr.length;i++)
+                    {
+                        console.log("attr_key:"+object_attr[i]);
+                        var attr = object_attr[i];
+                        var attr_key = "";
+                        for(var key in attr)
+                        {
+                            attr_key = key;
+                            break;
+                        }
+                        console.log("attr_key:"+attr_key);
+
+                        if(product_attr)
+                        {
+                            var product_attr = eval('('+product_attr+')');
+                            var attr_value = product_attr[attr_key];
+                            console.log("attr_value:"+attr_value);
+                            if(attr.entry_mode==1)
+                            {
+                                attr_html += `<p><label>${attr_key}</label><input type='text' value='${attr_value}'></p>`;
+                            }
+                            if(attr.entry_mode==2)
+                            {
+                                var attr_values = attr[attr_key];
+                                console.log(attr_values);
+
+                                attr_html +="<p>"+
+                                                "<label>"+attr_key+"</label>"+
+                                                "<select>";
+                                                for(var j=0;j<attr_values.length;j++)
+                                                {
+                                                    if(attr_values[j]==attr_value)
+                                                    {
+                                                        attr_html +=`<option selected='selected'>${attr_values[j]}</option>`;
+                                                    }
+                                                    else
+                                                    {
+                                                        attr_html +=`<option>${attr_values[j]}</option>`;
+                                                    }
+                                                }   
+                                attr_html +=    "</select>"+
+                                            "</p>";
+                            }
+                            if(attr.entry_mode==3)
+                            {
+                                attr_html += `<p><label>${attr_key}</label><textarea>${attr_value}</textarea></p>`;
+                            }
+                        }
+                        else
+                        {
+                            if(attr.entry_mode==1)
+                            {
+                                attr_html += `<p><label>${attr_key}</label><input type='text' value=''></p>`;
+                            }
+                            if(attr.entry_mode==2)
+                            {
+                                var attr_values = attr[attr_key];
+                                console.log(attr_values);
+
+                                attr_html +="<p>"+
+                                                "<label>"+attr_key+"</label>"+
+                                                "<select>";
+                                                for(var j=0;j<attr_values.length;j++)
+                                                {
+                                                    if(attr_values[j]==attr_value)
+                                                    {
+                                                        attr_html +=`<option selected='selected'>${attr_values[j]}</option>`;
+                                                    }
+                                                    else
+                                                    {
+                                                        attr_html +=`<option>${attr_values[j]}</option>`;
+                                                    }
+                                                }   
+                                attr_html +=    "</select>"+
+                                            "</p>";
+                            }
+                            if(attr.entry_mode==3)
+                            {
+                                attr_html += `<p><label>${attr_key}</label><textarea></textarea></p>`;
+                            }
+                        }
+                    }
+                    $('#product_set_attr .list').append(attr_html);
+                    return;
+                }
+            }
+            function renderAttr(model_attr){
+                //规格对象
+                // console.log(model_attr);
+                // var object_attr = eval('('+model_attr+')');
+                // console.log(object_attr);
+                var object_attr = model_attr;
+                console.log(object_attr);
+                var attr_html = "";
+                for(var i=0;i<object_attr.length;i++)
+                {
+                    console.log("attr_key:"+object_attr[i]);
+                    var attr = object_attr[i];
+                    var attr_key = "";
+                    for(var key in attr)
+                    {
+                        console.log("key:"+key);
+                        attr_key = key;
+                        break;
+                    }
+                    // console.log(attr_key);
+                    var attr_value = attr[attr_key];
+                    console.log("attr_value:"+attr_value);
+                    // console.log(attr.entry_mode);
+                    if(attr.entry_mode==1)
+                    {
+                        attr_html += "<p><label>"+attr_key+"</label><input type='text' value='"+attr_value+"'></p>";
+                    }
+                    if(attr.entry_mode==2)
+                    {
+                        attr_html +="<p>"+
+                                        "<label>"+attr_key+"</label>"+
+                                        "<select>";
+                                        for(var j=0;j<attr_value.length;j++)
+                                        {
+                                            attr_html +="<option>"+attr_value[j]+"</option>";
+                                        }   
+                        attr_html +=    "</select>"+
+                                    "</p>";
+                    }
+                    if(attr.entry_mode==3)
+                    {
+                        attr_html += "<p><label>"+attr_key+"</label><textarea>"+attr_value+"</textarea></p>";
+                    }
+                    console.log(attr_html);
+                }
+                $('#product_set_attr .list').append(attr_html);
+                return;
+            }
+        </script>
+    </body>
+
+</html>

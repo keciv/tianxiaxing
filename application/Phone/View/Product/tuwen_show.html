@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>天下行</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="/public/phone/css/lpk.css" />
+		<link rel="stylesheet" href="/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/phone/lb/css/swiper.min.css">
+		<link rel="stylesheet" href="/public/phone/css/reset.css">
+		<link rel="stylesheet" href="/public/phone/css/public.css">
+		<link rel="stylesheet" href="/public/phone/css/other.css">
+		<link rel="stylesheet" type="text/css" href="/public/phone/css/newStyle.css" />
+		<link rel="stylesheet" href="/public/phone/layer/layui.css">
+		<style type="text/css">
+			a:hover,
+			a:focus {
+				color: #fff !important;
+			}
+			.pro-tit1 p, .pro-tit1 text {
+				font-size: 14px !important;
+				color: #000;
+			}
+		</style>
+		<script src="/public/phone/js/rem.js"></script>
+
+	</head>
+
+	<body style="background: white !important;">
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a onclick="javascript :history.back(-1);">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center">
+				图文详情
+			</div>
+			<div class="fr right">
+				<!--< a href="javascript:;"><font class="glyphicon glyphicon-shopping-cart"></font></ a>-->
+			</div>
+		</header>
+		<div class="" style="width: 100%;height: 1.5rem;"></div>
+		<div class="pro-banner">
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<img src="/public/phone/img/banner1.png"/>
+					</div>
+					<div class="swiper-slide">
+						<img src="/public/phone/img/banner1.png"/>
+					</div>
+				</div>
+				<!-- Add Pagination -->
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+
+		<div class="pro-tit">
+			<h2>图文详情</h2>
+		</div>
+		<div class="pro-tit pro-tit1">
+			<p>
+				描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述
+			</p>
+		</div>
+		<div class="pro-bot" style="width: 100%;">
+			<!-- <div class="add-good">加入购物车</div> -->
+			<!-- <div class="buy-good buy-good_" style="width: 100%;">立即购买</div> -->
+		</div>
+
+
+
+		<script src="/public/phone/lb/js/jquery.min.js"></script>
+		<script src="/public/phone/layer/layer.js"></script>
+		<script src="/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="/public/phone/lb/js/swiper-3.4.2.jquery.min.js"></script>
+		<script>
+			var lpksc = 0;
+			var member_id = "{$member_id}";
+			$('.specifications1').on('click', 'span', function() {
+				$(this).addClass('active').siblings().removeClass('active');
+			})
+			$(function() {
+				
+				var swiper = new Swiper('.pro-banner .swiper-container', {
+					slidesPerView: '1',
+					spaceBetween: 10,
+					loop: true,
+					autoplay: 3000,
+					pagination: '.pro-banner .swiper-pagination',
+				});
+				
+				
+				
+				var lpkData = location.href.split("?")[1];
+				var id = lpkData.split("=")[1];
+				$.ajax({
+					type: 'get',
+					url: '/app.php/Product/show',
+					dataType: 'json',
+					data: {
+						id: id
+					},
+					success: function(data) {
+						console.log(data.data)
+						//id
+						$('.pro-tit h2').attr('id', data.data.id)
+						//轮播图
+						var newlbt = '';
+						var lbt = data.data.picturemore;
+						for (var i = 0; i < lbt.length; i++) {
+							newlbt += `
+							<div class="swiper-slide">
+								<img src="${lbt[i]}"/>
+							</div>`;
+						}
+						<!-- $('.swiper-wrapper').append(); -->
+						
+						<!-- var swiper = new Swiper('.pro-banner .swiper-container', {
+							slidesPerView: '1',
+							spaceBetween: 10,
+							loop: true,
+							autoplay: 3000,
+							pagination: '.pro-banner .swiper-pagination',
+						}); -->
+						//	商品名称
+						var shopName = data.data.title;
+						$('.pro-tit h2').text(shopName);
+						//	商品价格
+						var shopPrice = data.data.current_price;
+						$('.pro-tit p span').text(shopPrice);
+						//  单位
+						var shopUnit = data.data.unit;
+						$('.pro-tit p font').text(shopUnit);
+						//						产示图
+						var content = data.data.content;
+						for (var j = 0; j < content.length; j++) {
+							var newContent = `
+							<p><img src="${content[j]}" /></p>
+							`
+							$('.pro-info').append(newContent);
+						}
+
+						
+					}
+				})
+			});
+		</script>
+	</body>
+
+</html>

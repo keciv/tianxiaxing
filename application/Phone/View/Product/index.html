@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>天下行</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/phone/lb/css/swiper.min.css">
+		<link rel="stylesheet" href="/public/phone/css/reset.css">
+		<link rel="stylesheet" href="/public/phone/css/public.css">
+		<link rel="stylesheet" href="/public/phone/css/index.css">
+		<script src="/public/phone/lb/js/jquery.min.js"></script>
+		<script src="/public/phone/js/masonry-docs.min.js"></script>
+		<script src="/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="/public/phone/lb/js/swiper.min.js"></script>
+		<script src="/public/phone/js/rem.js"></script>
+		<link rel="stylesheet" href="/public/phone/css/style.css">
+		<script src="/public/phone/js/iscroll.js"></script>
+	</head>
+
+	<body>
+
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a onclick="javascript :history.back(-1);">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center" style="width: 70%;">
+				<div class="index-search" style="margin-top: 0.1rem;">
+					<div class="search-box">
+						<form action="/index.php/ProductList.html" method="post">
+							<input type="search" name="search" placeholder="输入名称" style="border: 1px solid #fff;width: 88%;">
+						</form>
+					</div>
+				</div>
+			</div>
+		</header>
+		
+		
+		
+		<div class="" style="width: 100%;height: 1.5rem;"> </div>
+
+		<div id="wrapper" style="top: 1.5rem;" data-flag='true'>
+			<div id="scroller" class="index-prolist content index-prolist1">
+				<section id="root" class="clearfix">
+
+				</section>
+				<div class="pull-loading">
+					上拉加载
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var search = "{$search}";
+			var id = "{$id}";
+			var member_type = "{$member_type}";
+			$(function() {
+				
+				pullOnLoad(id);
+
+			})
+
+			$('#root').on('click', '.box a', function() {
+				var id = $(this).attr('id');
+				console.log(id);
+				window.location.href = `ProductShow.html?id=${id}`;
+
+			})
+
+			var myscroll = new iScroll("wrapper", {
+				onScrollMove: function() { //拉动时
+					//上拉加载
+					if (this.y < this.maxScrollY) {
+						$(".pull-loading").html("释放加载");
+						$(".pull-loading").addClass("loading");
+					} else {
+						$(".pull-loading").html("上拉加载");
+						$(".pull-loading").removeClass("loading");
+					}
+				},
+				onScrollEnd: function() { //拉动结束时
+					//上拉加载
+					if ($(".pull-loading").hasClass('loading')) {
+						$(".pull-loading").html("加载中...");
+						pullOnLoad();
+					}
+				},
+				onRefresh: function() {
+					$('.pull-loading').html("上拉加载");
+				}
+			});
+			//上拉加载函数,ajax
+			var num = 6;
+			var page = 1; //每次加载4条
+
+			function pullOnLoad(fn) {
+				
+				var stu=$('#wrapper').attr('data-flag');
+				if(stu==false){
+					return;
+				}
+				$('#wrapper').attr('data-flag','false');
+
+				setTimeout(function() {
+
+					$.ajax({
+						url: '/app.php/Product/getData',
+						type: "get",
+						dataType: 'json',
+						data: {
+							CurrentPage: page,
+							paginalNum: num,
+							sort_id: id,
+							search: search
+						},
+						success: function(data) {
+							console.log(data)
+							
+							if(data.code==200){
+								var result = "";
+								var dataArr=data.data;
+								if (dataArr.length >0) {
+									for (var i = 0; i < dataArr.length; i++) {
+										var row = data.data[i];
+										var price = "";
+										if(member_type=="0")
+										{
+											price_type = row.youke_price.split("+");
+											price_yuan = price_type[0];
+											price_jifen = price_type[1];
+											price = `¥${price_yuan}`;
+										}
+										else if(member_type=="1")
+										{
+											price_type = row.huiyuan_price.split("+");
+											price_yuan = price_type[0];
+											price_jifen = price_type[1];
+											price = `¥${price_yuan}+${price_jifen}积分`;
+										}
+										else if(member_type=="2")
+										{
+											price_type = row.dianpu_price.split("+");
+											price_yuan = price_type[0];
+											price_jifen = price_type[1];
+											price = `¥${price_yuan}+${price_jifen}积分`;
+										}
+										result +=
+											`
+										<div class="box">
+											<a href="javascript:;" id=${dataArr[i].id}>
+											    <div class="img-box">
+												<img class="itemImg" src="/${dataArr[i].picture}">
+												</div>
+												<div class="tit">
+													<h3>${dataArr[i].title}</h3>
+													<p>${price}</p>
+												</div>
+											</a>
+										</div>`
+									}
+									$("#scroller section").append(result);
+									page++;
+									myscroll.refresh();
+								} else {
+									$(".pull-loading").text("无数据");
+								}
+								$('#wrapper').attr('data-flag','true');
+							}else{
+								layer.msg(data.msg)
+							}
+							
+						},
+						error: function() {
+							console.log("出错了");
+						}
+					});
+					myscroll.refresh();
+				}, 1000);
+			}
+		</script>
+	</body>
+
+</html>

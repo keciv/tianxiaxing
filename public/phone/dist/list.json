@@ -1,0 +1,29 @@
+{
+    "lists":[
+         {
+            "listname":"消费记录",
+	     	"listtime":"2018.12.20",
+	     	"listmoney":"20"
+         },
+          {
+            "listname":"消费记录",
+            "listtime":"2018.12.20",
+            "listmoney":"20"
+        },
+         {
+            "listname":"消费记录",
+            "listtime":"2018.12.20",
+            "listmoney":"20"
+        },
+         {
+            "listname":"消费记录",
+            "listtime":"2018.12.20",
+            "listmoney":"20"
+        },
+         {
+            "listname":"消费记录",
+            "listtime":"2018.12.20",
+            "listmoney":"20"
+        }
+    ]
+}

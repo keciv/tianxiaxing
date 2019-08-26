@@ -1,0 +1,66 @@
+.slider-focus {
+	position: relative;
+	max-width: 100%;
+	overflow: hidden;
+	/*max-height:320px;*/
+	margin: 0 auto;
+}
+
+.slider-focus .hd {
+	position: absolute;
+	width: 100%;
+	height: 2.8rem;
+	left: 0;
+	bottom: 0%;
+	z-index: 1;
+	line-height: 28px;
+	text-align: center;
+}
+.slider-focus .hd ul{
+	margin: 0;
+}
+.slider-focus .hd li {
+	display: inline-block;
+	vertical-align: middle;
+	width: 0.6rem;
+	height: 0.6rem;
+	margin: 0.3rem;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+	font-size: 0;
+	line-height: 0;
+	text-indent: -9999em;
+	background: #DBBC4D;
+	cursor: pointer;
+}
+
+.slider-focus .hd li.on {
+	background: #fff;
+}
+
+.slider-focus .bd {
+	position: relative;
+	z-index: 0;
+	margin-top: -2px;
+}
+
+.slider-focus .bd li {
+	position: relative;
+	text-align: center;
+	height: 15rem;
+}
+.slider-focus .bd li a{
+	display: block;
+	width: 100%;
+}
+.slider-focus .bd li img {
+	vertical-align: top;
+	width: 100%;
+	height: 100%;
+	/* 图片宽度100%，达到自适应效果 */
+}
+.slider-focus .bd li a {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

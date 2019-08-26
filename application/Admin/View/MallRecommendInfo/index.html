@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <div id="div_MallRecommendInfo" align="center">
+        <form id="form_MallRecommendInfo" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id_MallRecommendInfo" value="{$id}" />
+            <input type="hidden" id="caozuo_MallRecommendInfo" value="{$caozuo}" />
+            <table id="table_content">
+                <tr>
+                    <td align="right">标题：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallRecommendInfoTitle" name="MallRecommendInfoTitle" style="width:300px" value="{$info.title}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">图片：</td>
+                    <td>
+                        <input type="file" id="MallRecommendInfoImage" name="MallRecommendInfoImage" style="width:200px"/>
+                        
+                        <a href="javascript:void(0)" class="easyui-linkbutton" onClick="upload('__APP__/Upload/upload', 'MallRecommendInfoImage', 'form_MallRecommendInfo', 'RecommendInfo');">上传</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">预览图：</td>
+                    <td>
+                        <img id="img_MallRecommendInfoImage" src="__ROOT__/{$info.picture}" style=" width:100px; height:100px" />
+                        <input type="hidden" id="hidden_MallRecommendInfoImage" value="{$info.picture}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>时间：</td>
+                    <td><input type="text" class="easyui-datebox" id="date_MallRecommendInfo" name="date_MallRecommendInfo" value="{$info.time}" /></td>
+                </tr>
+                <tr id="ceshi">
+                    <td align="right">内容：</td>
+                    <td>
+                        <textarea id="editor_MallRecommendInfo" style=" width:700px; height:500px"></textarea>
+                        <input type="hidden" id="hidden_editor_MallRecommendInfo" value='{$info.content}'>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" id="save_MallRecommendInfo" value="确认" />
+
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            var editor_content = $('#hidden_editor_MallRecommendInfo').val();
+            KindEditor.remove('#editor_MallRecommendInfo');
+            $('#editor_MallRecommendInfo').val(editor_content);
+            createKindeditor("#editor_MallRecommendInfo");
+            $('#save_MallRecommendInfo').click(function () {
+                var caozuo = $('#caozuo_MallRecommendInfo').val();
+                var content = $('#editor_MallRecommendInfo').val();
+                $.ajax({
+                    url: '__APP__/MallRecommendInfo/' + caozuo,
+                    data: { id: $('#newid_MallRecommendInfo').val(), title: $('#MallRecommendInfoTitle').val(), picture: $('#hidden_MallRecommendInfoImage').val(), time: $('#date_MallRecommendInfo').val(), content: content },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if (msg == "error") {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                        else if (msg == "id_null") {
+                            alert("请选择要修改的数据");
+                            return;
+                        }
+                        else if (msg == "picture_null") {
+                            alert("请上传图片");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

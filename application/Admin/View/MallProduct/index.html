@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>会员管理</title>
+</head>
+<body>
+    <table id='MallProduct'></table>
+    <div id='toolbar_MallProduct' style=" padding:5px 0px 5px 5px">
+        <div style=" height:5px"></div>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="addMallProduct">新增</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="editMallProduct">修改</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" id="delMallProduct">删除</a>
+        
+        <!--<input id="product_search" />
+        <div id="product_search_list" style="width:120px">
+            <div data-options="name:'Title',iconCls:'icon-ok'">产品名称</div>
+            <div data-options="name:'Pinpai',iconCls:'icon-ok'">品牌</div>
+        </div> -->
+       
+    </div> 
+    <div id="caozuo_recommend" class="easyui-menu" data-options="onClick:caozuo_is_true" style="width:120px;">
+        <div>是</div>
+        <div>否</div>
+    </div>
+    <div id="caozuo_sale" class="easyui-menu" data-options="onClick:caozuo_is_true" style="width:120px;">
+        <div>上架</div>
+        <div>下架</div>
+    </div>
+    <input type="hidden" id="caozuo_field_product" name="">
+    <input type="hidden" id="caozuo_id_product" name="">
+    <script type="text/javascript">
+        $(function () {
+            $('#MallProduct').datagrid({
+                url: '__APP__/MallProduct/getData',
+                columns: [[
+                    { field: 'cbo_Product', checkbox: true },
+                    { field: 'id', title: 'ID', hidden: true },
+                    {
+                        field: 'title', title: '产品名称', width: 300, align: 'center'
+                    },
+                    {
+                        field: 'sort_name', title: '产品分类', width: 100, align: 'center'
+                    },
+                    {
+                        field: 'store_name', title: '所属店铺', width: 100, align: 'center'
+                    },
+                    {
+                        field: 'characteristic', title: '属性', width: 70, hieght: 30, align: 'center',
+                        formatter: function (value, row, index) {
+                            var a = '<span onclick=open_newtab("__APP__/MallProduct/CharacteristicInfo?id='+row.id+'","产品属性设置","MallProduct")>设置</span>';
+                            return a;
+                        }
+                    },
+                    {
+                        field: 'recommend', title: '商城推荐', width: 70, align: 'center',
+                        formatter: function (value, row, index) {
+                            var a = "";
+                            if(value=="1")
+                            {
+                                a = "推荐";
+                            }
+                            else
+                            {
+                                a = "不推荐";
+                            }
+                            return a;
+                        }
+                    },
+                    {
+                        field: 'is_sale', title: '上/下架', width: 100, align: 'center',
+                        formatter: function (value, row, index) {
+                            var a = "";
+                            if(value=="1")
+                            {
+                                a = "上架";
+                            }
+                            else
+                            {
+                                a = "下架";
+                            }
+                            return a;
+                        }
+                    },
+                    {
+                        field: 'real_time', title: '实时价格', width: 100, align: 'center',
+                        formatter: function (value, row, index) {
+                            var a = "";
+                            if(value=="1")
+                            {
+                                a = "上架";
+                            }
+                            else
+                            {
+                                a = "下架";
+                            }
+                            return a;
+                        }
+                    }
+                ]],
+                //斑马线
+                striped: true,
+                //底部分页
+                pagination: true,
+                //行号
+                rownumbers: true,
+                //只能选中一行
+                singleSelect: true,
+                //如果为true，单击复选框将永远选择行。如果为false，选择行将不选中复选框。
+                selectOnCheck: false,
+                //如果为true，当用户点击行的时候该复选框就会被选中或取消选中。如果为false，当用户仅在点击该复选框的时候才会呗选中或取消。
+                checkOnSelect: false,
+                //工具栏
+                toolbar: '#toolbar_MallProduct',
+                //是否显示行脚
+                showFooter: true,
+                onRowContextMenu:function(e, index, row){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var pageX = e.pageX;
+                    var pageY = e.pageY;
+                    var td = $(e.target).closest("td");
+                    var field = td.attr('field');
+                    if(field=="recommend")
+                    {
+                        $('#caozuo_field_product').val(field);
+                        $('#caozuo_id_product').val(row.id);
+                        $('#caozuo_recommend').menu('show', {left: pageX,top: pageY});
+                    }
+                    if(field=="is_sale")
+                    {
+                        $('#caozuo_field_product').val(field);
+                        $('#caozuo_id_product').val(row.id);
+                        $('#caozuo_sale').menu('show', {left: pageX,top: pageY});
+                    }
+                    if(field=="real_time")
+                    {
+                        $('#caozuo_field_product').val(field);
+                        $('#caozuo_id_product').val(row.id);
+                        $('#caozuo_sale').menu('show', {left: pageX,top: pageY});
+                    }
+                }
+            });
+        })
+        
+        function caozuo_recommend(item){
+            var name = $('#caozuo_field_product').val();
+            var id = $('#caozuo_id_product').val();
+            $.ajax({
+                url:'__APP__/MallProduct/recommend',
+                data:{"id":id,"name":name,"value":item.text},
+                type:'post',
+                success:function(msg){
+                    if(msg=="ok")
+                    {
+                        layer.msg("操作成功");
+                        $('#MallProduct').datagrid('reload');
+                        return;
+                    }
+                    if(msg=="error")
+                    {
+                        layer.msg("操作失败，请重新操作");
+                        return;
+                    }
+                    if(msg=="id_null")
+                    {
+                        layer.msg("请选择要操作的数据");
+                        return;
+                    }
+                }
+            })
+        }
+
+        function caozuo_is_true(item){
+            var id = $('#caozuo_id_product').val();
+            var name = $('#caozuo_field_product').val();
+            var value = "";
+            if(item.text=="上架"||item.text=="是")
+            {
+                value = "1";
+            }
+            else if(item.text=="下架"||item.text=="否")
+            {
+                value = "0";
+            }
+            $.ajax({
+                url:'__APP__/MallProduct/is_true',
+                data:{"id":id,"name":name,"value":value},
+                type:'post',
+                success:function(msg){
+                    if(msg=="ok")
+                    {
+                        layer.msg("操作成功");
+                        $('#MallProduct').datagrid('reload');
+                        return;
+                    }
+                    if(msg=="error")
+                    {
+                        layer.msg("操作失败，请重新操作");
+                        return;
+                    }
+                    if(msg=="id_null")
+                    {
+                        layer.msg("请选择要操作的数据");
+                        return;
+                    }
+                }
+            })
+        }
+        
+        // $('#product_search').searchbox({
+        //     searcher: function (value, name) {
+        //         //alert(name);
+        //         //alert(value);
+        //         //                var data = "{" + name + ":" + value + "}";
+        //         if (value.length <= 0) {
+        //             alert("请输入要搜索的关键词");
+        //             return;
+        //         }
+        //         $('#Products').datagrid('reload', { Search: name, Value: value, caozuo: 'chakan' });
+        //         //alert(value + "," + name)
+        //     },
+        //     menu: '#product_search_list',
+        //     prompt: '请输入值',
+        //     width: '250'
+        // });
+        // var coordinate = {};
+        // function get_coordinate(){
+        //     alert("ok");
+        //     $(document).off('mousedown');
+        //     $(document).on('mousedown',function(e){
+        //         coordinate = {x:e.pageX,y:e.pageY};
+        //         //console.log(coordinate);
+        //         alert(e.pageX+ ", " + e.pageY);
+        //     })
+        //     console.log(coordinate);
+        //     return coordinate;
+        // }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#addMallProduct').click(function () {
+                var titleMsg = '添加_产品';
+                var IsHave = $('#right').tabs('exists', titleMsg);
+                if (IsHave) {
+                    $('#right').tabs('select', titleMsg);
+                    var tab = $('#right').tabs('getSelected');
+                    tab.panel('refresh', "__APP__/MallProduct/info");
+                }
+                else {
+                    $('#right').tabs('close', "修改_产品");
+                    $('#right').tabs('add', {
+                        title: titleMsg,
+                        content: '<div class="easyui-panel" href="__APP__/MallProduct/info" fit="true" border="false" ></div>',
+                        closable: true
+                    });
+                }
+            })
+
+
+            $('#editMallProduct').click(function () {
+                var titleMsg = '修改_产品';
+                
+                var selected = $('#MallProduct').datagrid('getSelected');
+                if (selected) 
+                {
+                    var IsHave = $('#right').tabs('exists', titleMsg);
+                    if (IsHave) {
+                        $('#right').tabs('select', titleMsg);
+                        var tab = $('#right').tabs('getSelected');
+                        tab.panel('refresh', "__APP__/MallProduct/info?id=" + selected.id);
+                    }
+                    else {
+                        $('#right').tabs('close', "添加_产品");
+                        $('#right').tabs('add', {
+                            title: titleMsg,
+                            content: '<div class="easyui-panel" href="__APP__/MallProduct/info/?id=' + selected.id + '" fit="true" border="false" ></div>',
+                            closable: true
+                        });
+                    }
+                }
+                else {
+                    alert("请选择要进行修改的一条数据");
+                }
+            })
+
+
+            $('#delMallProduct').click(function () {
+                var checked = $('#MallProduct').datagrid('getChecked');
+                var delID = "";
+                //alert(checked.length);
+                if (checked.length > 0) {
+                    $.messager.confirm('确认', '您确认要删除这些数据吗？', function (r) {
+                        if (r) {
+
+                            for (var i = 0; i < checked.length; i++) {
+                                delID += checked[i].id;
+                                delID += ",";
+                            }
+
+                            delID = delID.substr(0, delID.length - 1);
+                            //alert(delID);
+
+                            $.ajax({
+                                url: '__APP__/MallProduct/delete',
+                                data: {"id": delID },
+                                type: 'post',
+                                success: function (msg) {
+                                    if (msg == "ok") {
+                                        alert("删除成功");
+                                        $('#MallProduct').datagrid('reload');
+                                    }
+                                    if (msg == "error") {
+                                        alert("删除失败，请重新尝试");
+                                    }
+                                    if (msg == "idnull") {
+                                        alert("数据不存在，刷新后请重新操作");
+                                    }
+                                }
+                            })
+
+                        }
+                    })
+                }
+                else {
+                    alert("请选择要删除的数据");
+                }
+            })
+
+        })
+        function open_newtab(url, title, table) {
+            var IsHave = $('#right').tabs('exists', title);
+            if (IsHave) {
+                $('#right').tabs('select', title);
+                var tab = $('#right').tabs('getSelected');  // 获取选择的面板
+                //刷新面板
+                tab.panel('refresh', url);
+            }
+            else {
+                $('#right').tabs('add', {
+                    title: title,
+                    content: '<div class="easyui-panel" href="' + url + '" fit="true" border="false" ></div>',
+                    closable: true
+
+                });
+            }
+        }
+    </script>
+</body>
+</html>

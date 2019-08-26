@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="div_MemberInfo" align="center">
+        <form id="form_MemberInfo" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id_member" value="{$member.id}" />
+            <table id="table_memberinfo">
+                <tr>
+                    <td align="right">用户名：</td>
+                    <td><input class="easyui-textbox" data-options="" name="username" style="width:300px" value="{$member.username}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">密码：</td>
+                    <td><input class="easyui-textbox" data-options="" name="password" style="width:300px" value="{$member.password}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">昵称：</td>
+                    <td><input class="easyui-textbox" data-options="" name="nickname" style="width:300px" value="{$member.nickname}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">等级：</td>
+                    <td><input class="easyui-textbox" data-options="" name="grade" style="width:300px" value="{$member.username}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">头像：</td>
+                    <td>
+                        <input type="file" id="headportrait" name="headportrait" style="width:200px"/>
+                        
+                        <a href="javascript:void(0)" class="easyui-linkbutton" onClick="upload('__APP__/Upload/upload', 'headportrait', 'form_MemberInfo', 'Headportrait');">上传</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">预览图：</td>
+                    <td>
+                        <img id="img_headportrait" src="__ROOT__/{$member.headportrait}" style=" width:100px; height:100px" />
+                        <input type="hidden" id="hidden_headportrait" name="hidden_headportrait" value="{$member.headportrait}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">姓名：</td>
+                    <td><input class="easyui-textbox" data-options="" name="name" style="width:300px" value="{$member.name}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">性别：</td>
+                    <td><input class="easyui-textbox" data-options="" name="sex" style="width:300px" value="{$member.sex}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">电话：</td>
+                    <td><input class="easyui-textbox" data-options="" name="phone" style="width:300px" value="{$member.phone}"/></td>
+                </tr>
+
+                <tr>
+                    <td align="right">QQ：</td>
+                    <td><input class="easyui-textbox" data-options="" name="QQ" style="width:300px" value="{$member.QQ}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">微信：</td>
+                    <td><input class="easyui-textbox" data-options="" name="WeChat" style="width:300px" value="{$member.WeChat}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">邮箱：</td>
+                    <td><input class="easyui-textbox" data-options="" name="email" style="width:300px" value="{$member.email}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">积分：</td>
+                    <td>
+                        <input class="easyui-textbox" data-options="" name="integral" style="width:300px" value="{$member.integral}"/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">创建时间：</td>
+                    <td><input class="easyui-textbox" data-options="" name="createtime" style="width:300px;" value="{$member.createtime}" readonly="readonly"/></td>
+                </tr>
+                <tr>
+                    <td align="right">关闭时间：</td>
+                    <td><input class="easyui-textbox" data-options="" name="closetime" style="width:300px" value="{$member.closetime}" readonly="readonly"/></td>
+                </tr>
+                <tr>
+                    <td align="right">审核：</td>
+                    <td>
+                        <select class="easyui-combobox" name="Audit" style="width:100px;">
+                            <option value="通过">通过</option>
+                            <option value="未通过">未通过</option>
+                        </select>
+                    </td>
+                </tr>
+                
+            </table>
+        </form>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" id="save_member">保存</a>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            //$('#form_MemberInfo [name="Audit"]').combobox("select","");
+
+            $('#save_member').click(function(){
+                var form=$('#form_MemberInfo').serialize();
+                console.log(form);
+                $.ajax({
+                    url:'__APP__/MemberInfo/edit',
+                    data:form,
+                    type:'post',
+                    success:function(msg){
+                        if(msg=="ok")
+                        {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if(msg=="error")
+                        {
+                            alert("抱歉，保存失败，请重新操作");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

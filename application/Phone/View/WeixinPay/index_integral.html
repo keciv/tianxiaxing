@@ -1,0 +1,58 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' 'self'  *.jythjc.com kefu.easemob.com;img-src 'self' data:;font-src 'self' data:;report-uri /error/csp.php" />
+    <title>微信支付</title>
+    <script type="text/javascript" src="__ROOT__/public/phonemall/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+	//调用微信JS api 支付
+	function jsApiCall(jsApiParameters)
+	{
+		jsApiParameters = JSON.parse(jsApiParameters);
+		WeixinJSBridge.invoke(
+			'getBrandWCPayRequest',
+			jsApiParameters,
+			function(res){
+				WeixinJSBridge.log(res.err_msg);
+				var Cts = res.err_msg;
+				if(Cts.indexOf("ok") > 0){
+					location.href='http://www.tyjpkj.com/phone.php/Order.html';
+				}
+			}
+		);
+	}
+
+	function callpay()
+	{
+		var order_id = "{$order_id}";
+		$.ajax({
+			url:'/app.php/WeixinPay/get_integral_Parameters',
+			data:{"orderID":order_id},
+			type:'get',
+			dataType:"json",
+			success:function(data){
+				// layer.msg(data.code);
+				if(data.code=="200")
+				{
+					console.log(data.data.mweb_url);
+					// window.location.href = data.data.mweb_url;
+				}
+				else
+				{
+					layer.msg(data.msg);
+				}
+			} 
+		})
+	}
+	</script>
+</head>
+<body>
+    <br/>
+    <font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">1分</span>钱</b></font><br/><br/>
+	<div align="center">
+		<input type="hidden" id="jsApiParameters" value="">
+		<button style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >立即支付</button>
+	</div>
+</body>
+</html>

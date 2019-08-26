@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="div_MallIndexModule" align="center">
+        <form id="form_MallIndexModule" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id_MallIndexModule" value="{$id}" />
+            <input type="hidden" id="caozuo_MallIndexModule" value="{$caozuo}" />
+            <table id="table_content">
+                <tr>
+                    <td align="right">标题：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallIndexModule_module" style="width:200px" value="{$module.module}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">描述：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallIndexModule_description" style="width:200px" value="{$module.description}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">模块：</td>
+                    <td>
+                        <input id="ModuleSort" class="easyui-combobox" value="{$module.module_id}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">图片：</td>
+                    <td>
+                        <input type="file" id="MallIndexModule_picture" name="MallIndexModule_picture" style="width:200px"/>
+                        
+                        <a href="javascript:void(0)" class="easyui-linkbutton" onClick="upload('__APP__/Upload/upload', 'MallIndexModule_picture', 'form_MallIndexModule', 'Module');">上传</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">预览图：</td>
+                    <td>
+                        <img id="img_MallIndexModule_picture" src="__ROOT__/{$module.picture}" style=" width:100px; height:100px" />
+                        <input type="hidden" id="hidden_MallIndexModule_picture" value="{$module.picture}" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" id="save_MallIndexModule" value="确认" />
+
+    </div>
+    
+    <script type="text/javascript">
+        $('#ModuleSort').combobox({
+            url:'__APP__/Module/getData',
+            method: 'post',
+            valueField: 'id',
+            textField: 'text'
+        })
+        $(function () {
+            $('#save_MallIndexModule').click(function () {
+                var caozuo = $('#caozuo_MallIndexModule').val();
+                $.ajax({
+                    url: '__APP__/MallIndexModule/' + caozuo,
+                    data: { id: $('#id_MallIndexModule').val(), module: $('#MallIndexModule_module').val(), description: $('#MallIndexModule_description').val(),module_id:$('#ModuleSort').combobox('getValue'), picture: $('#hidden_MallIndexModule_picture').val(), specify_url: $('#MallBannerUrl').val() },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if (msg == "error") {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                        else if (msg == "id_null") {
+                            alert("请选择要修改的数据");
+                            return;
+                        }
+                        else if (msg == "module_null") {
+                            alert("请输入模块名称");
+                            return;
+                        }
+                        else if (msg == "picture_null") {
+                            alert("请上传图片");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    
+</body>
+</html>

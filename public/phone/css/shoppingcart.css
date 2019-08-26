@@ -1,0 +1,346 @@
+img {
+	max-width: 100%;
+}
+
+em {
+	font-style: normal
+}
+
+a:hover, a:focus {
+    color: #fff;
+}
+.shop {
+	width: 100%;
+	border-bottom: 1px solid #f5f5f5;
+	box-sizing: border-box;
+	font-size: 0.4rem;
+	line-height: 1.3rem;
+	padding: 0 4% 0 3%;
+	font-weight: bold;
+}
+
+.shop i {
+	display: inline-block;
+	width: 0.5rem;
+	vertical-align: middle;
+	margin-right: 5px;
+	content: url(../img/shoptop.png);
+}
+
+.shop a{
+	color: #666;
+}
+.shop .fr{
+	color: #999;
+	line-height: 1.2rem;
+}
+
+.product {
+	width: 100%;
+	/*height: 7.5rem;*/
+}
+
+.product .product-box {
+	width: 100%;
+	position: relative
+}
+
+.product-box .product-ckb {
+	width: 1rem;
+	height: 100%;
+	display: inline-block;
+	float: left;
+	text-align: center;
+	line-height: 3.1rem;
+	z-index: 99;
+	position: absolute
+}
+
+.product-ckb em {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	border: 1px solid #B8B4B4;
+	display: inline-block;
+	cursor: pointer
+}
+
+.product-ckb .product-xz {
+	background: url(../img/gouico.png) no-repeat 0 0;
+	background-size: 0.5rem;
+	border: 0;
+	display: inline-block
+}
+
+.product-sx {
+	float: left;
+	padding: 0.5rem 0;
+	padding-left: 1rem;
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+	/*position: absolute;
+	top: 0;
+	left: 0*/
+}
+
+.product-sx .product-img {
+	width: 1.9rem;
+	display: inline-block;
+	float: left;
+	height: 1.9rem;
+	
+}
+
+.product-sx .product-name {
+	color: #000;
+	max-width: 67%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	padding-left: 10px;
+	font-size: 0.3rem;
+	margin-top: 0.1rem;
+	max-height: 0.8rem;
+}
+.product-sx .product-name1{
+	color: #999;
+	max-width: 67%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	padding-left: 10px;
+	font-size: 0.3rem;
+	margin-top: 0.1rem;
+}
+.product-sx .product-price {
+	font-size: 0.35rem;
+	color: #e46b7e;
+	margin: 0px 0 0 14px;
+	display: inline-block;
+	float: left;
+	margin-top: 0.1rem;
+}
+.product-sx .product-price span{
+	font-size: 0.36rem;
+}
+
+.product-amount {
+	position: absolute;
+	right: 0.5rem;
+	bottom: 0.34rem;
+}
+
+.product_gw {
+	line-height: 25px;
+	overflow: hidden;
+	font-size: .6rem
+}
+
+.product_gw em {
+	/*display: block;*/
+	height: 25px;
+	color: #7A7979;
+	text-align: center;
+	cursor: pointer;
+	font-size: 0.5rem;
+}
+
+.product_gw .product-num {
+	text-align: center;
+	width: 38px;
+	font-style: normal;
+	font-size: 12px;
+	line-height: 25px;
+	border: 0;
+	padding: 0;
+	pointer-events: none
+}
+
+.product_gw em.product-add {
+	border-right: 0;
+}
+
+.product-del {
+	width: 1.15rem;
+	display: inline-block;
+	position: absolute;
+	right: 5px;
+	top: 8px;
+	cursor: pointer
+}
+
+.product-js {
+	width: 100%;
+	height: 1.5rem;
+	display: inline-block;
+	position: fixed;
+	bottom: 1.6rem;
+	border-top: 1px solid #ccc;
+	line-height: 1.5rem;
+	max-width: 640px;
+	background: #fff;
+	z-index: 99
+}
+
+.product-al {
+	display: inline-block;
+	height: 1.5rem;
+	width: 3rem
+}
+
+.product-js .product-all {
+	width: 1rem;
+	height: 100%;
+	display: inline-block;
+	float: left;
+	text-align: center;
+	line-height: 1.8rem
+}
+
+.product-js .product-all em {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	border: 1px solid #B8B4B4;
+	display: inline-block;
+	cursor: pointer
+}
+
+.product-js .product-all .product-all-on {
+	background: url(../img/gouico.png) no-repeat 0 0;
+	background-size: 0.5rem;
+	border: 0;
+	display: inline-block
+}
+
+.all-xz {
+	cursor: pointer
+}
+
+.product-all-qx {
+	color: #797979;
+	font-size: 0.4rem;
+	line-height: 1.5rem;
+}
+
+.all-sl {
+	color: #797979;
+	display: inline-block;
+	margin-left: 8px;
+	font-size: 0.4rem;
+}
+
+.product-all-sl {
+	position: relative;
+	top: 1px;
+	font-size: 0.4rem;
+}
+
+.all-product {
+	text-align: right;
+	float: right
+}
+
+.all-product .all-product-a {
+	font-size: 0.35rem;
+	color: #f41638;
+	font-weight: bolder;
+	display: inline-block;
+	margin-right: 10px;
+	line-height: 1.5rem;
+}
+.all-product .all-product-a span{
+	font-size: 0.45rem;
+}
+.product-sett {
+	float: right;
+	width: 2.5rem;
+	text-align: center;
+	color: #fff;
+	background: #e91b1b;
+	font-size: 0.38rem;
+	line-height: 1.5rem;
+}
+
+.product-sett-a {
+	background: #b2b2b2;
+	pointer-events: none;
+	font-size: 1.2rem;
+	line-height: 4rem;
+}
+
+.kon-cat {
+	display: none
+}
+
+.catkon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	padding-bottom: 3.2rem;
+	box-sizing: border-box;
+	text-align: center;
+	background: #f4f4f4;
+	display: table;
+	z-index: 100
+}
+
+.kon-box {
+	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
+	cursor: pointer
+}
+
+.kon-hz {
+	width: 50%;
+	margin: 0 auto
+}
+
+.kon-box .kon-wz {
+	display: block;
+	font-size: 1rem;
+	color: #aaa;
+	margin: 20px 0;
+	font-size: 14px;
+}
+
+.kon-box .kon-lj {
+	display: inline-block;
+	width: 100%;
+	height: 1.5rem;
+	line-height: 1.5rem;
+	background: #383838;
+	color: #fff;
+	margin-top: 10px;
+	font-size: 14px;
+}
+.bodyItem{
+    background: white;
+    margin-bottom: 0.3rem;
+}
+
+.shop em{
+	width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    border: 1px solid #B8B4B4;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+}
+
+.shop .product-xz1 {
+    background: url(../img/gouico.png) no-repeat 0 0;
+    background-size: 0.5rem;
+    border: 0;
+    display: inline-block;
+}

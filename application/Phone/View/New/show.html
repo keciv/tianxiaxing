@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>{$navigation.title}</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/phone/lb/css/swiper.min.css">
+		<link rel="stylesheet" href="/public/phone/css/reset.css">
+		<link rel="stylesheet" href="/public/phone/css/public.css">
+		<link rel="stylesheet" href="/public/phone/css/index.css">
+		<script src="/public/phone/lb/js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1228517_0resig0n8v7r.css" />
+		<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1279253_rhdr20j2z9.css" />
+		<script src="/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="/public/phone/lb/js/swiper-3.4.2.jquery.min.js"></script>
+		<script src="/public/phone/js/rem.js"></script>
+		<link rel="stylesheet" href="/public/phone/css/style.css">
+		<script src="/public/phone/js/iscroll.js"></script>
+		<style type="text/css">
+			.Newinfo {
+				width: 100%;
+				padding: 0rem 5%;
+				margin-top: 1rem;
+				background: white;
+			}
+			
+			.Newinfo h3 {
+				text-align: center;
+				font-size: 0.4rem;
+				margin-top: 0.8rem;
+				font-weight: bold;
+			}
+			
+			.Newinfo h4 {
+				text-align: center;
+				font-size: 0.4rem;
+				margin-top: 0.3rem;
+				margin-bottom: 0.7rem;
+			}
+			
+			.Newinfo p {
+				font-size: 0.4rem;
+				text-indent: 0.8rem;
+				line-height: 0.7rem;
+			}
+			
+			.Newinfo p img {
+				max-width: 100%;
+			}
+			
+			.NEXT {
+				width: 100%;
+				background: white;
+				padding: 1rem 0;
+			}
+			
+			.NEXT p {
+				width: 94%;
+				margin: auto;
+				font-size: 0.4rem;
+				line-height: 0.8rem;
+			}
+			
+			.NEXT p a {
+				font-size: 0.4rem;
+				color: #333;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a href="__APP__/NewList_{$navigation.id}.html">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center">{$navigation.title}</div>
+			<div class="fr right">
+			</div>
+		</header>
+		<div class="" style="width: 100%;height: 1.5rem;"></div>
+
+		<div class="Newinfo">
+			<h3>{$new.title}</h3>
+			<h4>{$new.time}</h4>
+			<p>{$new.content}</p>
+		</div>
+
+		<!-- <div class="NEXT">
+			<p>上一篇：
+				<a style="color:red;" href="javascript:;">没有了</a>
+			</p>
+			<p>下一篇：
+				<a style="color:green;" href="/index/news/advertinfo/id/2">400对系列复兴号 集中上线2019年春运</a>
+			</p>
+		</div> -->
+	</body>
+	<script type="text/javascript">
+		$(function() {
+			$('.Newinfo').children('p').each(function() {
+				var d = $(this).children('img');
+				if(d.length > 0) {
+					$(this).css('text-indent', 0);
+					$(this).css('text-align', 'center');
+				}
+			})
+		})
+	</script>
+
+</html>

@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+
+    <table id='AdminInfo'></table>
+    <div id='toolbar_AdminInfo' style=" padding:5px 0px 5px 5px">
+        <div style=" height:5px"></div>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="add_Admin">新增</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="edit_Admin">修改</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" id="delete_Admin">删除</a>
+    </div>
+
+    <script type="text/javascript">
+        $('#AdminInfo').datagrid({
+            url: '__APP__/AdminInfo/getData',
+            columns: [[
+                    { field: 'cbo_UserInfo', checkbox: true },
+                    { field: 'id', title: 'ID', hidden: true },
+                    { field: 'username', title: '用户名', width: 100, align: 'center', editor: 'text' },
+                    { field: 'password', title: '密码', width: 100, align: 'center', editor: 'text' }
+
+            ]],
+            toolbar: '#toolbar_AdminInfo',
+            pagination: true,
+            singleSelect: true,
+            selectOnCheck: false,
+            rownumbers: true,
+            idField: 'id',
+            checkOnSelect: false
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#add_Admin').click(function () {
+                var titleMsg = '添加_管理员';
+                var IsHave = $('#right').tabs('exists', titleMsg);
+                if (IsHave) {
+                    $('#right').tabs('select', titleMsg);
+                    //var tab = $('#right').tabs('getSelected');
+                    //tab.panel('refresh', "__APP__/.html?id=" + $('#MallLanmuID').val());
+                }
+                else {
+                    $('#right').tabs('close', "修改_管理员");
+                    $('#right').tabs('add', {
+                        title: titleMsg,
+                        content: '<div class="easyui-panel" href="__APP__/AdminInfo/info" fit="true" border="false" ></div>',
+                        closable: true
+                    });
+                }
+
+            })
+
+
+            $('#edit_Admin').click(function () {
+                var titleMsg = '修改_管理员';
+                var selected = $('#AdminInfo').datagrid('getSelected');
+                if (selected) {
+                    var IsHave = $('#right').tabs('exists', titleMsg);
+                    if (IsHave) {
+                        $('#right').tabs('select', titleMsg);
+                        var tab = $('#right').tabs('getSelected');
+                        tab.panel('refresh', "__APP__/AdminInfo/info?id=" + selected.id);
+                    }
+                    else {
+                        $('#right').tabs('close', "添加_管理员");
+                        $('#right').tabs('add', {
+                            title: titleMsg,
+                            content: '<div class="easyui-panel" href="__APP__/AdminInfo/info/?id=' + selected.id + '" fit="true" border="false" ></div>',
+                            closable: true
+                        });
+                    }
+                }
+                else {
+                    alert("请选择要进行修改的一条数据");
+                }
+            })
+
+
+            $('#delete_Admin').click(function () {
+                var checked = $('#AdminInfo').datagrid('getChecked');
+                var delID = "";
+                if (checked.length > 0) {
+                    $.messager.confirm('确认', '您确认要删除这些数据吗？', function (r) {
+                        if (r) {
+
+                            for (var i = 0; i < checked.length; i++) {
+                                delID += checked[i].id;
+                                delID += ",";
+                            }
+                            delID = delID.substr(0, delID.length - 1);
+                            $.ajax({
+                                url: '__APP__/AdminInfo/delete',
+                                data: { "id": delID },
+                                type: 'post',
+                                success: function (msg) {
+                                    if (msg == "ok") {
+                                        alert("删除成功");
+                                        $('#AdminInfo').datagrid('reload');
+                                    }
+                                    if (msg == "error") {
+                                        alert("删除失败，请重新尝试");
+                                    }
+                                    if (msg == "id_null") {
+                                        alert("数据不存在，刷新后请重新操作");
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+                else {
+                    alert("请选择要删除的数据");
+                }
+            })
+
+        })
+    </script>
+</body>
+</html>

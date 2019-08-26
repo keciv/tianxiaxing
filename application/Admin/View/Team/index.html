@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>会员管理</title>
+</head>
+<body>
+    <table id="MemberTeam"></table>
+    <script type="text/javascript">
+        $(function () {
+            $('#MemberTeam').treegrid({
+                url: '__APP__/Team/getData',
+                idField: 'id',
+                treeField: 'phone',
+                columns: [[
+                    { field: 'cbo_MemberTeam', checkbox: true },
+                    { field: 'id', title: 'ID', hidden: true },
+                    { field: 'phone', title: '手机号', width: 300 , align: 'center'},
+                    { field: 'username', title: '姓名', width: 100 , align: 'center'},
+                    { field: 'create_time', title: '创建时间', width: 150 , align: 'center'},
+                    { field: 'count', title: '数量', width: 100 , align: 'center'}
+                ]],
+                //斑马线
+                striped: true,
+                checkOnSelect: false,
+                singleSelect: true,
+                selectOnCheck: false,
+                queryParams: { firstID: "{$id}" },
+                //是否显示行脚
+                showFooter: true
+            });
+        })
+    </script>
+    <script type="text/javascript">
+        // $(function(){
+        //     $('#MemberTeam').treegrid('load',,{
+        //         id: "{$id}"
+        //     })
+        // })
+    </script>
+</body>
+</html>

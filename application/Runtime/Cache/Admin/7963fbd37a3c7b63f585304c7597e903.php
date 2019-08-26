@@ -1,0 +1,80 @@
+<?php if (!defined('THINK_PATH')) exit();?>﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    
+    <div style="margin-top:20px">
+        <form id="form_MallWebInfo" method="post">
+            <input type="hidden" id="hidden_MallWebInfoID" value="<?php echo ($webinfo["id"]); ?>" />
+            <div style="margin-top: 15px;">
+                <label class="control-label" >
+                    <label for="Title" style="width: 120px;display: block;float: left;right: 50px;
+line-height: 30px;padding-left: 20px;">标题：</label>
+                </label>
+                <input id="MallTitle" type="text" value="<?php echo ($webinfo["title"]); ?>" style="width: 300px;height: 30px;margin: 15px;margin-bottom: 0px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <label class="control-label">
+                    <label for="KeyWord" style="width: 120px; display: block;float: left;right: 50px;line-height: 88px;padding-left: 20px;">Meta Keywords：</label>
+                </label>
+                <input id="MallKeywords" type="text" value="<?php echo ($webinfo["keywords"]); ?>" style="margin-left: 0px;margin-right: 0px;height: 200px;width: 300px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <label class="control-label">
+                    <label for="Description" style="    width: 120px;display: block;float: left;right: 50px;line-height: 200px;padding-left: 20px;">Meta Description：</label>
+                </label>
+                <input id="MallDescription" type="text" value="<?php echo ($webinfo["description"]); ?>" style="margin-left: 0px;margin-right: 0px;height: 200px;width: 300px;">
+            </div>
+            <div style="margin: 2% 14%;">
+                <a id="save_MallInfo" href="javascript:void(0)" class="easyui-linkbutton">保存</a> 
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        $('#MallTitle').textbox({
+            width: 200,
+            height: 30,
+        })
+        $('#MallKeywords').textbox({
+            width: 300,
+            height: 88,
+            multiline: true
+
+        })
+        $('#MallDescription').textbox({
+            width: 400,
+            height: 200,
+            multiline: true
+        })
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#save_MallInfo').click(function () {
+                var Title = $("#MallTitle").textbox('getValue');
+                var Keywords = $("#MallKeywords").textbox('getValue');
+                var Description = $("#MallDescription").textbox('getValue');
+                var id = $('#hidden_MallWebInfoID').val();
+                $.ajax({
+                    url: '/admin.php/MallWebInfo/save',
+                    data: { id:id, Title: Title, Keywords: Keywords, Description: Description },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("设置成功");
+                        }
+                        else {
+                            alert("设置失败，请重新设置");
+                        }
+
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

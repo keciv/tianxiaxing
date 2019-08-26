@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title></title>
+</head>
+<body>
+    <table id="order_show">
+        <tr>
+            <td align="right">订单编号：</td>
+            <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$order_store.ordernum}"/></td>
+        </tr>
+        <tr>
+            <td align="right">下单时间：</td>
+            <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$order_store.create_time}"/></td>
+        </tr>
+        
+        <tr>
+            <td align="right">收件人：</td>
+            <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$order_store.consignee}"/></td>
+        </tr>
+        <tr>
+            <td align="right">联系电话：</td>
+            <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$order_store.phone}"/></td>
+        </tr>
+        <tr>
+            <td align="right">收货地址：</td>
+            <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$order_store.province}{$order_store.city}{$order_store.district}{$order_store.address}"/></td>
+        </tr>
+        <tr style="height: 20px"></tr>
+        <volist name="order_product" id="product">
+            <tr>
+                <td align="right">产品名称：</td>
+                <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$product.product_name}"/></td>
+            </tr>
+            <tr>
+                <td align="right">产品图：</td>
+                <td><img src="/{$product.product_picture}" style="width: 150px;height: 150px"></td>
+            </tr>
+            <tr>
+                <td align="right">价格：</td>
+                <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$product.product_current_price}"/></td>
+            </tr>
+            <tr>
+                <td align="right">购买数量：</td>
+                <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$product.product_num}"/></td>
+            </tr>
+            <tr>
+                <td align="right">小计：</td>
+                <td><input class="easyui-textbox" data-options="" style="width:300px" value="{$product.xiaoji}"/></td>
+            </tr>
+            <tr style="height:10px"></tr>
+        </volist>
+
+        
+    </table>
+
+</body>
+</html>

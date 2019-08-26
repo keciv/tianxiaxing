@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>{$navigation.title}</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/phone/lb/css/swiper.min.css">
+		<link rel="stylesheet" href="/public/phone/css/reset.css">
+		<link rel="stylesheet" href="/public/phone/css/public.css">
+		<link rel="stylesheet" href="/public/phone/css/index.css">
+		<script src="/public/phone/lb/js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1228517_0resig0n8v7r.css" />
+		<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1279253_rhdr20j2z9.css" />
+		<script src="/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="/public/phone/lb/js/swiper-3.4.2.jquery.min.js"></script>
+		<script src="/public/phone/js/rem.js"></script>
+		<link rel="stylesheet" href="/public/phone/css/style.css">
+		<script src="/public/phone/js/iscroll.js"></script>
+		<style type="text/css">
+			.lpkAd {
+				width: 90%;
+				margin: auto;
+			}
+			
+			.lpkAd ul {
+				width: 100%;
+				padding-top: 0.4rem;
+			}
+			
+			.lpkAd ul li {
+				width: 100%;
+				border-bottom: 1px solid #f2f2f2;
+				position: relative;
+				margin-bottom: 0.2rem;
+			}
+			
+			.lpkAd ul li a {
+				display: block;
+				width: 76%;
+				font-size: 0.35rem;
+				line-height: 1.2rem;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+			
+			.lpkAd ul li span {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				font-size: 0.35rem;
+				line-height: 1.2rem;
+				color: #999;
+			}
+			.lpkAd ul li img{
+				width: 100%;
+				height: 4rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a href="__APP__/index.html">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center">{$navigation.title}</div>
+			<div class="fr right">
+			</div>
+		</header>
+		<div class="" style="width: 100%;height: 1.5rem;"></div>
+
+		<div id="wrapper" style="top:1.52rem;bottom: 0;" data-flag="true">
+			<div id="scroller">
+				<section class="lpkAd ">
+					<ul>
+						
+					</ul>
+				</section>
+				<div class="pull-loading">
+					上拉加载
+				</div>
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		var id = "{$id}";
+		$(function() {
+				pullOnLoad();
+			})
+		var myscroll = new iScroll("wrapper", {
+			onScrollMove: function() {
+				if(this.y < 0) {
+					$(".pull-loading").html("释放加载");
+					$(".pull-loading").addClass("loading");
+				} else {
+					$(".pull-loading").removeClass("loading");
+				}
+			},
+			onScrollEnd: function() {
+				if($(".pull-loading").hasClass('loading')) {
+					$(".pull-loading").html("加载中...");
+					pullOnLoad();
+				}
+			},
+			onRefresh: function() {
+				$('.pull-loading').html("上拉加载");
+			}
+		});
+
+		var num = 5;
+		var page = 1;
+
+		function pullOnLoad() {
+			if($('#wrapper').data('flag') === false) {
+				return
+			}
+			$('#wrapper').data('flag', false)
+			setTimeout(function() {
+				$.ajax({
+					url: '/app.php/New/getData',
+					type: "get",
+					dataType: 'json',
+					data: {
+						CurrentPage: page,
+						paginalNum: num,
+						id: id
+					},
+					success: function(data) {
+						if(data.code == 200) {
+							console.log(data)
+							var dataArr = data.data;
+							var result = "";
+							if(dataArr.length > 0) {
+								for(var i = 0; i < dataArr.length; i++) {
+									var row = dataArr[i];
+									result +=
+										`
+										<li>
+										
+											<p>
+											<a href="__APP__/NewShow_${row.id}.html" style='width:100%;'>
+											<img src='${row.picture}'/>
+											</a>
+											</p>
+											<p>
+												<a href="__APP__/NewShow_${row.id}.html">
+													${row.title}
+												</a>
+												<span>${row.time}</span>
+											</p>
+										</li>
+												
+										     `
+
+								}
+								$("#scroller section ul").append(result);
+								page++;
+								myscroll.refresh();
+							} else {
+								$(".pull-loading").text("无数据");
+							}
+						} else {
+							layer.msg(data.msg)
+						}
+						$('#wrapper').data('flag', true)
+					},
+					error: function() {
+						console.log("出错了");
+					}
+				});
+				myscroll.refresh();
+			}, 500);
+		}
+	</script>
+
+</html>

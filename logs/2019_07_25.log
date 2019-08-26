@@ -1,0 +1,56 @@
+msg：进入业务逻辑了 
+order_id：157 
+package_id：4 , member_id：370 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：158 
+package_id：6 , member_id：361 
+count：10 
+msg： 开始超级大礼包
+结果：成功 
+msg：进入业务逻辑了 
+order_id：160 
+package_id：1 , member_id：344 
+count：1 
+msg：走一次 
+结果：成功 
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190725442448
+notify：进来啦 
+out_trade_no：20190725442448 
+order：Array 
+order_id：161 
+msg：进入业务逻辑了 
+order_id：161 
+package_id：6 , member_id：264 
+count：10 
+msg： 开始超级大礼包
+return：进来啦 
+msg：进入业务逻辑了 
+order_id：162 
+package_id：4 , member_id：374 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：163 
+package_id：2 , member_id：377 
+count：1 
+msg：走一次 
+结果：成功 
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190725936853
+notify：进来啦 
+out_trade_no：20190725936853 
+order：Array 
+order_id：164 
+msg：进入业务逻辑了 
+order_id：164 
+package_id：1 , member_id：379 
+count：1 
+msg：走一次 
+return：进来啦 

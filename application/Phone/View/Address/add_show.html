@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>收货地址</title>
+		<link rel="stylesheet" type="text/css" href="/public/phone/address/mpicker.css" />
+		<link rel="stylesheet" type="text/css" href="/public/phone/css/lpk.css" />
+		<link rel="stylesheet" type="text/css" href="/public/phone/lb/css/bootstrap.css" />
+		<link rel="stylesheet" href="/public/phone/layer/layui.css">
+		<link rel="stylesheet" type="text/css" href="/public/phone/css/reset.css" />
+		<script src="/public/phone/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/public/phone/lb/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/public/phone/layer/layer.js"></script>
+		<script src="/public/phone/js/rem.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			#subimt {
+				display: block;
+				width: 90%;
+				margin: auto;
+				background: #f7911d;
+				border: 0;
+				color: white;
+				font-size: 0.4rem;
+				line-height: 1rem;
+				margin-top: 2rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a href="__APP__/AddressList.html">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center">
+				编辑地址
+			</div>
+			<div class="fr right">
+			</div>
+		</header>
+		<div class="add_address">
+			<form method="post">
+				<!--method="post"-->
+				<div class="clearfix">
+					<div class="fl left">
+						收件人
+					</div>
+					<div class="fr right">
+						<input type="text" placeholder="请输入收件人姓名" name="name" id="name" />
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="fl left">
+						联系电话
+					</div>
+					<div class="fr right">
+						<input type="text" placeholder="请输入收件人手机号" name="phone" id="phone" />
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="fl left">
+						所在区域
+					</div>
+					<div class="fr right">
+						<input type="text" placeholder="请选择收件地址所在区域" class="select-value" id="addressInfo" name="addressInfo" />
+					</div>
+				</div>
+				<div class="info_">
+					<textarea placeholder="请输入详细地址" name="address" id="address"></textarea>
+				</div>
+				<div class="swmr clearfix">
+					<div class="fl le">
+						设为默认地址
+					</div>
+					<div class="fr ri">
+						<div class="dashDiv" id="is_default">
+							<span class="dashSpan"></span>
+						</div>
+					</div>
+				</div>
+				<input type="button" id="subimt" name="" value="保存" /><br /><br />
+			</form>
+		</div>
+	</body>
+	<script src="/public/phone/address/json.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/public/phone/address/jsonExchange.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/public/phone/address/mPicker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$('.dashDiv').bind('click', function() {
+			var class_ = $(this).attr('class');
+			console.log($(".select-value").val());
+			if(class_ == 'dashDiv') {
+				$(this).addClass('dashDivSelectd');
+			} else {
+				$(this).removeClass('dashDivSelectd');
+			}
+		})
+	</script>
+	<script type="text/javascript">
+		$('.select-value').mPicker({
+			level: 3,
+			dataJson: city3,
+			Linkage: true,
+			rows: 6,
+			sDefault: true,
+			splitStr: '/',
+			header: '<div class="mPicker-header">所在区域</div>',
+		})
+	</script>
+	<script type="text/javascript">
+		var member_id = "{$member_id}";
+		$(function() {
+			var lpkData = location.href.split("?")[1];
+			var id = lpkData.split("=")[1];
+			$.ajax({
+				type: "get",
+				url: "/app.php/Address/show",
+				dataType: "json",
+				data: {
+					member_id: member_id,
+					id: id
+				},
+				success: function(data) {
+					if(data.code == "200") {
+						$('#name').val(data.data.name)
+						$('#phone').val(data.data.phone)
+						var province = data.data.province;
+						var city = data.data.city;
+						var district = data.data.district;
+						var addressInfo = province + '/' + city + '/' + district
+						$('#addressInfo').val(addressInfo);
+						var address = data.data.address;
+						$('#address').val(address);
+						var is_default = data.data.is_default;
+						if(is_default == 1) {
+							$('#is_default').addClass('dashDivSelectd')
+						};
+						$('.add_address').attr('id', data.data.id);
+					} 
+					else if(data.code=="404")
+					{
+						layer.msg(data.msg,{time:2000},function(){
+							window.location.href = "/login.html";
+						});
+					}
+					else {
+						layer.msg(data.msg);
+					}
+				}
+			});
+		})
+		$("#subimt").click(function() {
+			var is_default='';
+			var id = $('.add_address').attr('id');
+			var name = $('#name').val();
+			var phone = $('#phone').val();
+			var addressInfo = $('#addressInfo').val();
+			var newarr = addressInfo.split('/');
+			var province = newarr[0];
+			var city = newarr[1];
+			var district = newarr[2];
+			var address = $('#address').val();
+			if($('#is_default').is('.dashDivSelectd')){
+				 is_default=1;
+			}else{
+				 is_default=0;
+			}
+			$.ajax({
+				type: "post",
+				url: "/app.php/Address/save",
+				dataType: 'json',
+				data: {
+					id: id,
+					name: name,
+					phone: phone,
+					province: province,
+					city: city,
+					district: district,
+					address: address,
+					member_id: member_id,
+					is_default:is_default,
+				},
+				success: function(data) {
+					if(data.code == "200") {
+						layer.msg("保存成功", {
+							time: 2000
+						}, function() {
+							window.history.back(-1);
+							// window.location.href = 'Address.html';
+						})
+					}
+					else if(data.code=="404")
+					{
+						layer.msg(data.msg,{time:2000},function(){
+							window.location.href = "/login.html";
+						});
+					}
+					else {
+						layer.msg(data.msg);
+					}
+				}
+			});
+
+		})
+	</script>
+
+</html>

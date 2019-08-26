@@ -1,0 +1,51 @@
+msg：进入业务逻辑了 
+order_id：48 
+package_id：4 , member_id：211 
+count：10 
+msg： 开始超级大礼包
+结果：成功 
+msg：进入业务逻辑了 
+order_id：49 
+package_id：1 , member_id：215 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：50 
+package_id：3 , member_id：216 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：52 
+package_id：1 , member_id：217 
+count：1 
+msg：走一次 
+结果：成功 
+msg：进入业务逻辑了 
+order_id：53 
+package_id：2 , member_id：218 
+count：1 
+msg：走一次 
+结果：成功 
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190628851866
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190628851866
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190628851866
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190628851866
+config：Array 
+return_url：http://www.xjinshangsc.com/Alipay/return_url.html
+ordernum：20190628851866
+msg：进入业务逻辑了 
+order_id：56 
+package_id：2 , member_id：210 
+count：1 
+msg：走一次 
+结果：成功 

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="div_MallBanner" align="center">
+        <form id="form_MallBanner" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id_MallBanner" value="{$id}" />
+            <input type="hidden" id="caozuo_MallBanner" value="{$caozuo}" />
+            <table id="table_content">
+                <tr>
+                    <td align="right">标题：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallBannerTitle" name="MallBannerTitle" style="width:200px" value="{$banner.title}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">Banner图：</td>
+                    <td>
+                        <input type="file" id="MallBannerImage" name="MallBannerImage" style="width:200px"/>
+                        
+                        <a href="javascript:void(0)" class="easyui-linkbutton" onClick="upload('__APP__/Upload/upload', 'MallBannerImage', 'form_MallBanner', 'Banner');">上传</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">预览图：</td>
+                    <td>
+                        <img id="img_MallBannerImage" src="__ROOT__/{$banner.picture}" style=" width:100px; height:100px" />
+                        <input type="hidden" id="hidden_MallBannerImage" value="{$banner.picture}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">链接：</td>
+                    <td><input type="text" class="easyui-textbox" id="MallBannerUrl" name="MallBannerUrl" value="{$banner.specify_url}" style="width:200px"/></td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" id="save_MallBanner" value="确认" />
+
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            $('#save_MallBanner').click(function () {
+                var caozuo = $('#caozuo_MallBanner').val();
+                $.ajax({
+                    url: '__APP__/MallBanner/' + caozuo,
+                    data: { id: $('#id_MallBanner').val(), title: $('#MallBannerTitle').val(),
+                        picture: $('#hidden_MallBannerImage').val(), specify_url: $('#MallBannerUrl').val() },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if (msg == "error") {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                        else if (msg == "id_null") {
+                            alert("请选择要修改的数据");
+                            return;
+                        }
+                        else if (msg == "picture_null") {
+                            alert("请上传图片");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    
+</body>
+</html>

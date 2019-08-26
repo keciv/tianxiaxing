@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>订单详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="/public/phone/css/lpk.css" />
+		<link rel="stylesheet" href="/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/phone/css/reset.css">
+		<link rel="stylesheet" href="/public/phone/css/public.css">
+		<link rel="stylesheet" href="/public/phone/css/other.css">
+		<link rel="stylesheet" href="/public/phone/layer/layui.css">
+		<script src="/public/phone/lb/js/jquery.min.js"></script>
+		<script src="/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="/public/phone/layer/layer.js"></script>
+		<script src="/public/phone/js/rem.js"></script>
+	</head>
+
+	<body class="bj-f2">
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a onclick="javascript :history.back(-1);">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center">
+				订单详情
+			</div>
+			<div class="fr right">
+				<!--< a href="javascript:;"><font class="glyphicon glyphicon-shopping-cart"></font></ a>-->
+			</div>
+		</header>
+		<div class="" style="height: 1.5rem;width: 100%;"></div>
+
+		<div class="order-consumer">
+			<div class="info">
+				<h3>收货人： {$order.consignee}</h3>
+				<h4>{$order.phone}</h4>
+			</div>
+			<div class="address">
+				<p>收货地址：{$order.province}{$order.city}{$order.district}{$order.address}</p>
+			</div>
+		</div>
+
+		<div class="order-goods lpk_ddinfo">
+			<ul class="goods-list">
+				<volist name="order_product" id="order_product">
+					<li class="goods-item">
+						<div class="goods-info">
+							<div class="goods-img">
+								<img src="{$order_product.product_picture}" />
+							</div>
+							<div class="goods-style">
+								<h3>{$order_product.product_name}</h3>
+								<div class="price">
+									<span>¥ <text class='shop_num'>{$order_product.product_current_price}</text></span>
+									<i>×{$order_product.product_number}</i>
+								</div>
+							</div>
+						</div>
+					</li>
+				</volist>
+			</ul>
+		</div>
+		<!-- <div class="lpk_two">
+			<a href="tel:1008611">联系客服</a>
+			<a href="售后.html">申请售后</a>
+		</div> -->
+		<div class="dd_info">
+			<h3>订单信息</h3>
+			<div class="info_item clearfix">
+				<p class="fl left">运费</p>
+				<p class="fr right">￥{$order_store.freight}</p>
+			</div>
+			<div class="info_item clearfix yf">
+				<p class="fl left">实付款(含运费)</p>
+				<p class="fr right">
+					<font>￥{$order_store.payment_price}</font>
+				</p>
+			</div>
+			<div class="info_item clearfix">
+				<p class="fl left">订单编号：{$order.number}</p>
+			</div>
+			<div class="info_item clearfix">
+				<p class="fl left">下单时间：{$order.create_time}</p>
+			</div>
+			<!-- <p class="del_"><span>删除订单</span></p> -->
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		$(function() {
+			var lpkData = location.href.split("?")[1];
+			var id = lpkData.split("=")[1];
+
+			$('.dd_info .del_ span').on('click', function() {
+				$.ajax({
+					type: "post",
+					url: "/app.php/Order/delete",
+					dataType: 'json',
+					data: {
+						member_id: 17,
+						id: id
+					},
+					success: function(data) {
+						console.log(data)
+						if(data.code == 200) {
+								document.getElementById("lll").click();
+						}
+					}
+				});
+
+			})
+
+		})
+	</script>
+
+</html>

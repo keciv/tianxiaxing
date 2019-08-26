@@ -1,0 +1,41 @@
+{
+    "lists":[
+         {
+            "pic":"img/pro2.jpg",
+            "tit":"杰克丹尼威士忌 jack daniels whiskey 洋酒700ml 带盒",
+            "money":"1"
+        },
+        {
+             "pic":"img/pro3.jpg",
+            "tit":"杰克丹尼威士忌 jack daniels whiskey 洋酒700ml 带盒 ",
+            "money":"2"
+        },
+         {
+            "pic":"img/pro1.jpg",
+            "tit":"杰克丹尼威士忌 jack daniels whiskey 洋酒700ml 带盒",
+            "money":"3"
+        },
+         {
+            "pic":"img/pro2.jpg",
+            "tit":"杰克丹尼威士忌 jack daniels whiskey 洋酒700ml 带盒",
+            "money":"4"
+        }
+    ],
+	"secList":[
+		{
+			"name":"小波",
+			"tel":"13578787878"
+		},
+		{
+			"name":"小旭",
+			"tel":"13578787878"
+		},
+		{
+			"name":"小连",
+			"tel":"13578787878"
+		}
+	],
+	"thrList":[
+		
+	]
+}

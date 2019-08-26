@@ -1,0 +1,49 @@
+{
+	"code": "200",
+	"msg": "获取数据成功",
+	"data": {
+		"count": "2",
+		"shop": [
+			{
+				"title": "佳源泰恒建材1",
+				"rows": [
+					{
+						"id": "11",
+						"title": "32.5袋装水泥",
+						"picture": "public\/upload\/Product\/c242977fd594041813e25359bdcc5836.jpg",
+						"count": "1",
+						"spec": {
+							"颜色": "红色",
+							"大小": "41"
+						},
+						"current_price": "340.00",
+						"product_id": "22"
+					}, {
+						"id": "12",
+						"title": "32.5袋装水泥",
+						"picture": "public\/upload\/Product\/c242977fd594041813e25359bdcc5836.jpg",
+						"count": "1",
+						"spec": {
+							"颜色": "红色",
+							"大小": "42"
+						},
+						"current_price": "340.00",
+						"product_id": "22"
+					}
+					, {
+						"id": "13",
+						"title": "32.5袋装水泥",
+						"picture": "public\/upload\/Product\/c242977fd594041813e25359bdcc5836.jpg",
+						"count": "1",
+						"spec": {
+							"颜色": "红色",
+							"大小": "42"
+						},
+						"current_price": "340.00",
+						"product_id": "22"
+					}
+				]
+			}
+		]
+	}
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>充值入会</title>
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/phone/css/lpk.css" />
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/phone/lb/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="__ROOT__/public/phone/css/reset.css" />
+
+	<style>
+		.tjsh {
+
+		} 
+	</style>
+	<script src="__ROOT__/public/phone/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__ROOT__/public/phone/lb/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="__ROOT__/public/layer/layer.js"></script>
+	<script src="__ROOT__/public/phone/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('[name="sure"]').click(function(){
+				$.ajax({
+					url:'Register/jihuo',
+					data:{"id":88},
+					type:'post',
+					success:function(msg){
+						if(msg=="ok")
+						{
+							layer.msg("已提交，请等待审核");
+						}
+						if(msg=="error")
+						{
+							layer.msg("提交失败，请重新提交");
+						}
+						if(msg=="member_null")
+						{
+							layer.msg("账号不存在",{time:2000},function(){
+								window.location.href = "/Register.html";
+							});
+						}
+					}
+				})
+			})
+			$('#weixin').click(function(){
+				layer.open({
+                    type: 1,
+                    area: ['300px', 'auto'],
+                    title: false,
+                    closeBtn: 1,
+                    // shadeClose: true,
+                    shade: 0.6,
+                    content: $('#div_weixin'),
+                    cancel:function(index, layero){
+                        layer.close(index);
+                        location.reload();
+                    }
+                });
+			})
+			$('#zhifubao').click(function(){
+				layer.open({
+                    type: 1,
+                    area: ['300px', 'auto'],
+                    title: false,
+                    closeBtn: 1,
+                    // shadeClose: true,
+                    shade: 0.6,
+                    content: $('#div_zhifubao'),
+                    cancel:function(index, layero){
+                        layer.close(index);
+                        location.reload();
+                    }
+                });
+			})
+		})
+	</script>
+</head>
+
+<body class="body-bj">
+	<include file="Public/header_back" />
+
+	<div class="lpk-join">
+		<h2>入会费{$join}元</h2>
+		<div class="lpk-join-box">
+			<h3 class="tit">支付方式</h3>
+			<ul class="pay-list">
+				<li class="pay-item" id="weixin">
+					<div class="img-box">
+						<img src="__ROOT__/public/phone/img/weixin.png" >
+					</div>
+					<div class="info">
+						微信支付
+					</div>
+				</li>
+				<li class="pay-item" id="zhifubao">
+					<div class="img-box">
+						<img src="__ROOT__/public/phone/img/mayun.png" >
+					</div>
+					<div class="info">
+						支付宝支付
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="qr-code" id="div_weixin" style="display: none;">
+        <div class="img-box">
+            <img src="__ROOT__/public/phone/img/weixin.jpg" style="width: 100%">
+        </div>
+        
+        <div class="lpk_myportant">
+        	<div class="bottom" style="margin-top: 0;">
+				<a href="javascript:void(0)">
+					<input type="button" name="sure" value="提交审核" />
+				</a>
+			</div>
+        </div>
+    </div>
+    <div class="qr-code" id="div_zhifubao" style="display: none;">
+        <div class="img-box">
+            <img src="__ROOT__/public/phone/img/zhifubao.jpg" style="width: 100%">
+        </div>
+        
+        <div class="lpk_myportant">
+        	<div class="bottom" style="margin-top: 0;">
+				<a href="javascript:void(0)">
+					<input type="button" name="sure" value="提交审核" />
+				</a>
+			</div>
+        </div>
+        
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>我的收藏</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="/public/phone/lb/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/public/phone/lb/css/swiper.min.css">
+		<link rel="stylesheet" href="/public/phone/css/reset.css">
+		<link rel="stylesheet" href="/public/phone/css/public.css">
+		<link rel="stylesheet" href="/public/phone/layer/layui.css">
+		<link rel="stylesheet" href="/public/phone/css/index.css">
+		<script src="/public/phone/lb/js/jquery.min.js"></script>
+		<script src="/public/phone/js/masonry-docs.min.js"></script>
+		<script src="/public/phone/lb/js/bootstrap.min.js"></script>
+		<script src="/public/phone/lb/js/swiper.min.js"></script>
+		<script src="/public/phone/js/rem.js"></script>
+		<script src="/public/phone/layer/layer.js"></script>
+		<link rel="stylesheet" href="/public/phone/css/style.css">
+		<script src="/public/phone/js/iscroll.js"></script>
+	</head>
+
+	<body class="pd1307" style="background: #fdfdfd;">
+		<header class="lpk_head clearfix">
+			<div class="fl left">
+				<a href="__APP__/MyCenter.html">
+					<font class="glyphicon glyphicon-menu-left"></font>
+				</a>
+			</div>
+			<div class="fl center">
+				我的收藏
+			</div>
+			<div class="fr right">
+				<a href="javascript:;">
+					<font class="">管理</font>
+				</a>
+			</div>
+		</header>
+		<div id="wrapper">
+			<div id="scroller" class="index-prolist content index-prolist1">
+				<section id="root" class="clearfix">
+
+				</section>
+				<div class="pull-loading">
+					上拉加载
+				</div>
+			</div>
+		</div>
+		<div class="scj clearfix">
+			<div class="fl left">
+				<em></em> 全选
+			</div>
+			<div class="fr right">
+				<span>删除</span>
+			</div>
+		</div>
+		<div class="" style="height: 1.2rem;width: 100%;"></div>
+		<script>
+			var member_id = "{$member_id}";
+			$('.index-prolist1').on('click', '.box em', function() {
+				$(this).toggleClass('product-xz');
+			});
+			$('.scj .left em').click(function() {
+				var fxk = $(".index-prolist1 .box em");
+				var qx = $(".scj .left em");
+				qx.toggleClass("product-xz");
+				if($(this).is(".product-xz")) {
+					fxk.addClass("product-xz");
+				} else {
+					fxk.removeClass("product-xz");
+				}
+			})
+			$('.lpk_head .right a font').click(function() {
+				$(this).toggleClass("show");
+				if($(this).is(".show")) {
+					$('.index-prolist1 .box em').slideDown();
+					$('.scj').slideDown();
+				} else {
+					$('.index-prolist1 .box em').slideUp();
+					$('.scj').slideUp();
+				}
+			})
+
+			$('.scj .right span').on('click', function() {
+				var total = [];
+				var length = $('.product-xz').length;
+				$(".index-prolist1 .box em").each(function() {
+					if($(this).is('.product-xz')) {
+						var scList = $(this).parents('.box').children('a').attr('id');
+						total.push(scList)
+					}
+				});
+				var str = total.join(',')
+				// console.log(str)
+				$.ajax({
+					type: "post",
+					url: "app.php/MyCollection/delete",
+					dataType: 'json',
+					data: {
+						id: str,
+						member_id: member_id,
+					},
+					success: function(data) {
+						if(data.code == "200") {
+							layer.msg("成功移出收藏", {
+								time: 1000
+							}, function() {
+								window.location.reload();
+							})
+						} else {
+							layer.msg(data.msg);
+						}
+					}
+				});
+			})
+
+			$(function() {
+				pullOnLoad();
+			});
+
+			var myscroll = new iScroll("wrapper", {
+				onScrollMove: function() { //拉动时
+					//上拉加载
+					if(this.y < this.maxScrollY) {
+						$(".pull-loading").html("释放加载");
+						$(".pull-loading").addClass("loading");
+					} else {
+						$(".pull-loading").html("上拉加载");
+						$(".pull-loading").removeClass("loading");
+					}
+				},
+				onScrollEnd: function() { //拉动结束时
+					//上拉加载
+					if($(".pull-loading").hasClass('loading')) {
+						$(".pull-loading").html("加载中...");
+						pullOnLoad();
+					}
+				},
+				onRefresh: function() {
+					$('.pull-loading').html("上拉加载");
+				}
+			});
+			//上拉加载函数,ajax
+			var num = 0;
+			var page = 6; //每次加载4条
+			var lpk = 1;
+
+			function pullOnLoad() {
+				setTimeout(function() {
+					$.ajax({
+						url: 'app.php/MyCollection/getData',
+						type: "get",
+						dataType: 'json',
+						data: {
+							member_id: member_id,
+							CurrentPage: lpk,
+							paginalNum: page,
+						},
+						success: function(data) {
+							if(data.code==200){
+								console.log(data)
+								var result = "";
+								var dataArr = data.data;
+								if(dataArr.length>0) {
+									for(var i = num; i < dataArr.length; i++) {
+										if(data.data[i].status == 1) {
+											result += `
+								      			<div class="box">
+													<a href="javascript:;" id="${dataArr[i].id}">
+														<img class="itemImg"  src="${dataArr[i].product_picture}">
+														<div class="tit">
+															<h3>${dataArr[i].product_title} </h3>
+															<p>¥${dataArr[i].current_price}</p>
+														</div>
+													</a>
+													<em></em>
+												</div>`
+										} else {
+											result += `
+												<div class="box">
+													<a href="javascript:;" id="${dataArr[i].id}">
+														<img class="itemImg"  src="${dataArr[i].product_picture}">
+														<div class="tit">
+															<h3>${dataArr[i].product_title} </h3>
+														</div>
+													</a>
+													<span>失效</span>
+													<em></em>
+												</div>`
+										}
+								
+									}
+									$("#scroller section").append(result);
+									lpk++;
+									myscroll.refresh();
+								} else {
+									$(".pull-loading").text("没有了");
+								}
+							}else{
+								
+							}
+						},
+						error: function() {
+							console.log("出错了");
+						}
+					});
+					myscroll.refresh();
+				}, 1000);
+			}
+		</script>
+	</body>
+
+</html>

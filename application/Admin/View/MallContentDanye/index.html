@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <div id="div_MallDanye" align="center">
+        <input type="hidden" id="lanmuid_MallDanye" value="{$navigation_id}" />
+        <textarea id="editor_MallDanye" style=" width:700px; height:500px"></textarea>
+        <input type="hidden" id="hidden_editor_MallDanye" value='{$data.content}'>
+        <input type="button" id="save_MallDanye" value="保存" />
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            var editor_content = $('#hidden_editor_MallDanye').val();
+            KindEditor.remove('#editor_MallDanye');
+            $('#editor_MallDanye').val(editor_content);
+            createKindeditor("#editor_MallDanye");
+            $('#save_MallDanye').click(function () {
+                var content = $('#editor_MallDanye').val();
+                $.ajax({
+                    url: '__APP__/MallContentDanye/save',
+                    data: { navigation_id: $('#lanmuid_MallDanye').val(), content: content },
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    
+</body>
+</html>

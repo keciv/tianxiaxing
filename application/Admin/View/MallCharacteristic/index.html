@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <style type="text/css">
+        *#addpro {
+            display: block;
+            width: 900px;
+        }
+
+        #addpro p {
+            padding: 0px 5px;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        #addpro div span {
+            display: inline-block;
+           
+            height: 20px;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        /*#addpro input[type="text"] {
+            width: 298px;
+            height: 20px;
+            position: relative;
+            border: 1px solid #D4D4D4;
+            background-color: #fff;
+            vertical-align: middle;
+            display: inline-block;
+            overflow: hidden;
+            outline: none;
+            white-space: nowrap;
+            margin: 0;
+            padding: 0;
+            -moz-border-radius: 5px 5px 5px 5px;
+            -webkit-border-radius: 5px 5px 5px 5px;
+            border-radius: 5px 5px 5px 5px;
+        }
+
+        #addpro input:focus {
+            box-shadow: 0 0 3px 0 #d4d4d4;
+        }*/
+
+        .add_list {
+            width: 418px;
+            height:240px;
+            margin: 15px 60px;
+            border: 1px solid #fff;
+            position: relative;
+        }
+
+        .add_list:hover {
+            border: 1px solid darkorange;
+        }
+
+        .add_list .dels {
+            display: none;
+            width: 40px;
+            color: darkorange;
+            height: 40px;
+            line-height: 40px;
+            text-decoration: none;
+            font-size: 20px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
+
+        .add_list:hover .dels {
+            display: inline-block;
+        }
+    </style>
+    <div id="addpro">
+        <div>
+            <p><span>产品分类：</span>
+                <input id="Characteristic_Sort">
+            </p>
+        </div>
+        <div class="as_lists" style="overflow: hidden;">
+            <p><span>产品属性：</span> <a href="javascript:void(0)" class="easyui-linkbutton" id="a_add_characteristic">新增属性</a></p>
+        </div>
+        <p style="padding-left: 250px;"><a class="easyui-linkbutton" id="save_sort_characteristic">确认</a></p>
+    </div>
+    <script type="text/javascript">
+        $('#Characteristic_Sort').combotree({
+            url: '__APP__/MallProductSort/getProductSortList',
+            method: 'post',
+            valueField: 'id',
+            textField: 'text',
+            required: true,
+            onLoadSuccess: function () {
+                $('#Characteristic_Sort').combotree('setValue', {$sort_id});
+            }
+        })
+        $(function () {
+            var add_id = 0;//属性个数
+            var sort_id = {$sort_id};
+            //加载属性
+            $.ajax({
+                url:'__APP__/MallCharacteristic/getData',
+                data:{sort_id:sort_id},
+                type:'post',
+                dataType:'json',
+                success:function(data){
+                    for(var i=0;i<data.length;i++)
+                    {
+                        var fangshi = "";
+                        var showImg = "";
+                        if(data[i].fangshi=="唯一值")
+                        {
+                            fangshi = 
+                                '<input type="radio" name="radio_fangshi' + i + '" value="唯一值" checked/>唯一值&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                '<input type="radio" name="radio_fangshi' + i + '" value="多项值"/>多项值';
+                        }
+                        else
+                        {
+                            fangshi = 
+                                '<input type="radio" name="radio_fangshi' + i + '" value="唯一值"/>唯一值&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                '<input type="radio" name="radio_fangshi' + i + '" value="多项值" checked/>多项值';
+                        }
+                        if(data[i].showImg=="是")
+                        {
+                            showImg = 
+                                '<input type="radio" name="radio_showImg' + i + '" value="否"/>否' +
+                                '<input type="radio" name="radio_showImg' + i + '" value="是" checked/>是&nbsp;&nbsp;&nbsp;&nbsp;';
+                                ;
+                        }
+                        else
+                        {
+                            showImg = 
+                                '<input type="radio" name="radio_showImg' + i + '" value="否" checked/>否' +
+                                '<input type="radio" name="radio_showImg' + i + '" value="是"/>是&nbsp;&nbsp;&nbsp;&nbsp;';
+                                
+                        }
+                        var add_str = 
+                            '<div class="add_list">' +
+                                '<a class="dels" href="javascript:void(0)" onclick="del_Characteristic_Sort(this)">×</a>' +
+                                '<p>'+
+                                    '<span>属性名称：</span>'+
+                                    '<input type="text" id="name_val' + i + '" name="name_val" value="' + data[i].name + '" />'+
+                                '</p>' +
+                                '<p>'+
+                                    '<span>是否显示属性图片：</span>'+
+                                    showImg +
+                                '</p>' +
+                                '<p>'+
+                                    '<span>录入方式：</span>' +
+                                    fangshi + 
+                                '</p>' +
+                                '<p style="height:100px">'+
+                                    '<span>可&nbsp;选&nbsp; 值：</span>'+
+                                    //'<input type="text" id="value' + i + '" name="value" value="' + data[i].value + '" />'+
+                                    '<textarea style="width:300px;height:100px;font-size:12px" id="value' + i + '" name="value" value="" >' + data[i].value + '</textarea>'+
+                                '</p>' +
+                                '<p>注：多项值时一行代表一个可选值</p>' +
+                            '</div>';
+                        $(".as_lists").append(add_str);
+                    }
+                    loadTextCss();
+                    add_id =  $('.add_list').length;
+                }
+            })
+            //添加属性
+            $('#a_add_characteristic').click(function () {
+                var add_str = '<div class="add_list">' +
+                        '<a class="dels" href="javascript:void(0)" onclick="del_Characteristic_Sort(this)">×</a>' +
+                        '<p>'+
+                            '<span>属性名称：</span>'+
+                            '<input type="text" id="name_val' + add_id + '" name="name_val" value="" />'+
+                        '</p>' +
+                        '<p>'+
+                            '<span>是否显示属性图片：</span>' +
+                            '<input type="radio" name="radio_showImg' + add_id + '" value="否" checked/>否' +
+                            '<input type="radio" name="radio_showImg' + add_id + '" value="是"/>是&nbsp;&nbsp;&nbsp;&nbsp;' + 
+                        '</p>' +
+                        '<p>'+
+                            '<span>录入方式：</span>' +
+                            '<input type="radio" name="radio_fangshi' + add_id + '" value="唯一值" checked/>唯一值' +
+                            '<input type="radio" name="radio_fangshi' + add_id + '" value="多项值" checked/>多项值' +
+                        '</p>' +
+                        '<p style="height:100px">'+
+                            '<span>可&nbsp;选&nbsp; 值：</span>'+
+                            '<textarea style="width:300px;height:100px;font-size:12px" id="value' + add_id + '" name="value" value="" ></textarea>'+
+                        '</p>' +
+                        '<p>注：多项值时一行代表一个可选值</p>' +
+                    '</div>';
+                $(".as_lists").append(add_str);
+                loadTextCss();
+                add_id++;
+            })
+            
+            //保存
+            $('#save_sort_characteristic').click(function () {
+                var count = $('.add_list').length;
+                var array_finally = new Array();
+                var data = "";
+                console.log("属性个数"+count);
+                for (var i = 0; i < count; i++)
+                {
+                    var array = new Array();
+                    array.push($('[name="radio_fangshi' + i + '"]:checked').val());
+                    array.push($('[name="radio_showImg' + i + '"]:checked').val());
+                    array.push($('#name_val' + i).val());
+                    array.push($('#value' + i).val());
+                    array_finally.push(array);
+                }
+                console.log("属性"+array_finally);
+
+                $.ajax({
+                    url: '__APP__/MallCharacteristic/save',
+                    data: { sort_id: sort_id, data: array_finally },
+                    type: 'post',
+                    success: function (msg) {
+                        if(msg=="ok")
+                        {
+                            alert("恭喜，保存成功");
+                            return;
+                        }
+                        else if(msg=="error")
+                        {
+                            alert("抱歉，保存失败");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+        //删除属性
+        function del_Characteristic_Sort(object) {
+            $(object).parent().remove();
+        }
+        function loadTextCss(){
+            $('[name="name_val"]').textbox({
+                width: 200,
+                height: 30
+            })
+            // $('[name="value"]').textbox({
+            //     width: 300,
+            //     height: 100,
+            //     multiline: true
+            // })
+            $('[name="value"]').each(function(index){
+                // var value = $('#value'+index).textbox('getValue');
+                // value=  value.replace('<br/>','\r\n');
+                // $('#value'+index).textbox('setText',value);
+                var temp = "";
+                var array = $(this).text().split('<br>');
+                console.log(array);
+                for(var i=0;i<array.length;i++)
+                {
+                    temp += array[i];
+                    temp += '\r';
+                }
+                $(this).html(temp);
+            })
+        }
+    </script>
+</body>
+</html>

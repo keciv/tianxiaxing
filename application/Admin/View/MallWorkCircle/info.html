@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>详情_共享平台</title>
+</head>
+<body>
+    <div id="div_MallCircle" align="center">
+        <form id="form_MallCircle" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id_MallCircle" value="{$id}" />
+            <input type="hidden" id="caozuo_MallCircle" value="{$caozuo}" />
+            <table id="table_content">
+                <tr>
+                    <td align="right">标题：</td>
+                    <td><input class="easyui-textbox" data-options="" id="MallCircleTitle" name="MallCircleTitle" style="width:300px" value="{$circle.title}"/></td>
+                </tr>
+                <tr>
+                    <td align="right">内容：</td>
+                    <td>
+                        <textarea id="editor_MallCircle_Content" style=" width:700px; height:500px"></textarea>
+                        <input type="hidden" id="hidden_editor_MallCircle_Content" value='{$circle.content}'>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" id="save_MallCircle" value="确认" />
+
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            
+            var editor_content = $('#hidden_editor_MallCircle_Content').val();
+            KindEditor.remove('#editor_MallCircle_Content');
+            $('#editor_MallCircle_Content').val(editor_content);
+            createKindeditor("#editor_MallCircle_Content");
+            $('#save_MallCircle').click(function () {
+                var caozuo = $('#caozuo_MallCircle').val();
+                var content = $('#editor_MallCircle_Content').val();
+                $.ajax({
+                    url: '__APP__/MallWorkCircle/' + caozuo,
+                    data: { "id":$('#id_MallCircle').val(), "title": $('#MallCircleTitle').val(),"content": content},
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，保存成功");
+                            //$('#MallOneTeltOneWay').datagrid('reload');
+                            return;
+                        }
+                        else if (msg == "error") {
+                            alert("保存失败，请重新操作");
+                            return;
+                        }
+                        else if (msg == "title_null") {
+                            alert("请输入标题");
+                            return;
+                        }
+                        else if (msg == "id_null") {
+                            alert("请选择要修改的数据");
+                            return;
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    
+</body>
+</html>

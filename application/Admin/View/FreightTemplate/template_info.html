@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <div id="div_FreightTemplate" align="center">
+        <input type="hidden" id="id_FreightTemplate" value="{$id}" />
+        <input type="hidden" id="caozuo_FreightTemplate" value="{$caozuo}" />
+        <table id="table_content">
+            <tr>
+                <td align="right">模板名称：</td>
+                <td><input class="easyui-textbox" data-options="" id="Template_Title" style="width:300px" value="{$template.title}"/></td>
+            </tr>
+            <tr>
+                <td align="right">宝贝地址：</td>
+                <td>
+                    <input id="temp_product_pro" value="">
+                    <input id="temp_product_city" value="">
+                    <input id="temp_product_dis" value="">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">发货时间：</td>
+                <td><input class="easyui-textbox" data-options="" id="MallProductOriginalPrice" name="MallProductOriginalPrice" style="width:150px" value="{$template.original_price}"/>元</td>
+            </tr>
+            <tr>
+                <td align="right">是否包邮：</td>
+                <td><input class="easyui-textbox" data-options="" id="MallProductCurrentPrice" name="MallProductCurrentPrice" style="width:150px" value="{$template.current_price}"/>元</td>
+            </tr>
+            <tr>
+                <td align="right">计价方式：</td>
+                <td><input class="easyui-textbox" data-options="" id="MallProductReserve" name="MallProductReserve" style="width:80px" value="{$template.reserve}"/></td>
+            </tr>
+            <tr>
+                <td align="right">运送方式：</td>
+                <td><input class="easyui-textbox" data-options="" id="MallProductUnit" name="MallProductUnit" style="width:80px" value="{$template.unit}"/></td>
+            </tr>
+        </table>
+        <input type="button" id="save_MallProduct" value="确认" />
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            $('#temp_product_pro').combobox({
+                url: '__APP__/District/getList',
+                method: 'post',
+                valueField: 'id',
+                textField: 'text',
+                required: true,
+                onSelect:function(record){
+                    console.log(record);
+                }
+            })
+            $('#temp_product_pro').combobox({
+                url: '__APP__/District/getList',
+                method: 'post',
+                valueField: 'id',
+                textField: 'text',
+                required: true
+            })
+            $('#temp_product_pro').combobox({
+                url: '__APP__/District/getList',
+                method: 'post',
+                valueField: 'id',
+                textField: 'text',
+                required: true
+            })
+            //保存
+            $('#save_FreightTemplate').click(function () {
+                var transport_method = '[{"method":"圆通","transport":[{"district":"全国","first":"1","price":"10","add":"1","add_price":"2"},{"district":"新疆，内蒙古","first":"1","price":"25","add":"1","add_price":"5"}]}]';
+
+            })
+        })
+    </script>
+    
+</body>
+</html>

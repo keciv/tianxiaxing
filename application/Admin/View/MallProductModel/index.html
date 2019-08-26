@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>会员管理</title>
+</head>
+<body>
+
+    <div id='ProductModel_toolber' style=" padding:5px 0px 5px 5px">
+        <div style=" height:5px"></div>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="add_ProductModel">新增</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-edit'" id="edit_ProductModel">修改</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-no'" id="delete_ProductModel">删除</a>
+    </div>
+
+    <table id="MallProductModel"></table>
+
+    <!--添加用户-->
+    <div id="Div_ProductModel_Add" style="display:none" align="center">
+        <table style="margin-top:20px">
+            <tr>
+                <td align="right">模型：</td>
+                <td><input type="hidden" id="caozuo_ProductModel"/></td>
+                <td><input type="hidden" name="model_id" value="0" /></td>
+                <td><input type="text" name="model" /></td>
+            </tr>
+        </table>
+        <br />
+        <input type="button" id="ProductModel_Add_queren" value="确认" />
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" id="ProductModel_Add_quxiao" value="取消" />
+
+    </div>  
+
+    <script type="text/javascript">
+        $(function () {
+            $('#MallProductModel').datagrid({
+                url: '__APP__/MallProductModel/getData',
+                columns: [[
+                    { field: 'cbo_ProductModel', checkbox: true },
+                    { field: 'id', title: 'ID', hidden: true },
+                    { field: 'model', title: '模型', width: 100 , align: 'center'},
+                    { 
+                        field: 'attr', title: '属性', width: 100 , align: 'center',
+                        formatter: function (value, row, index) {
+                             var a = '<span onclick=open_newtab("__APP__/MallProductAttr/index?model_id='+row.id+'","'+row.model+'_商品属性")>查看</span>';
+                             return a;
+                        }
+                    },
+                    { 
+                        field: 'spec', title: '规格', width: 100 , align: 'center',
+                        formatter: function (value, row, index) {
+                             var a = '<span onclick=open_newtab("__APP__/MallProductSpec/index?model_id='+row.id+'","'+row.model+'_商品规格")>查看</span>';
+                             return a;
+                        }
+                    }
+                ]],
+                //斑马线
+                striped: true,
+                //底部分页
+                pagination: true,
+                //行号
+                rownumbers: true,
+                //只能选中一行
+                singleSelect: true,
+                //如果为true，单击复选框将永远选择行。如果为false，选择行将不选中复选框。
+                selectOnCheck: false,
+                //如果为true，当用户点击行的时候该复选框就会被选中或取消选中。如果为false，当用户仅在点击该复选框的时候才会呗选中或取消。
+                checkOnSelect: false,
+                //工具栏
+                toolbar: '#ProductModel_toolber',
+                //是否显示行脚
+                showFooter: true,
+                idField: 'id'
+            });
+        })
+        
+        $('#Div_ProductModel_Add').dialog({
+            title: '添加模型',
+            width: 400,
+            height: 280,
+            closable: true,
+            closed: true,
+            cache: false,
+            onClose: function () {
+                $('#Div_ProductModel_Add [name="model"]').val('');
+            },
+            modal: true
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#delete_ProductModel').click(function () {
+                var checked = $('#MallProductModel').datagrid('getChecked');
+                var delID = "";
+                if (checked.length > 0) {
+                    $.messager.confirm('确认', '您确认要删除这些数据吗？', function (r) {
+                        if (r) {
+                            for (var i = 0; i < checked.length; i++) {
+                                delID += checked[i].id;
+                                delID += ",";
+                            }
+                            delID = delID.substr(0, delID.length - 1);
+                            $.ajax({
+                                url: '__APP__/MallProductModel/delete',
+                                data: { "id": delID },
+                                type: 'post',
+                                success: function (msg) {
+                                    if (msg == "ok") {
+                                        alert("删除成功");
+                                        $('#MallProductModel').datagrid('reload');
+                                    }
+                                    if (msg == "error") {
+                                        alert("删除失败，请重新尝试");
+                                    }
+                                    if (msg == "id_null") {
+                                        alert("数据不存在，刷新后请重新操作");
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+                else {
+                    alert("请选择要删除的数据");
+                }
+            })
+        })
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            //打开添加窗口
+            $('#ProductModel_Add_queren').unbind();
+            $('#add_ProductModel').click(function () {
+                $('#caozuo_ProductModel').val("add");
+                $('#Div_ProductModel_Add').show();
+                $('#Div_ProductModel_Add').dialog('open');
+            })
+            $('#edit_ProductModel').click(function () {
+                $('#caozuo_ProductModel').val("edit");
+                var selected = $('#MallProductModel').datagrid('getSelected');
+                if (selected) 
+                {
+                    $('#Div_ProductModel_Add [name="model_id"]').val(selected.id);
+                    $('#Div_ProductModel_Add [name="model"]').val(selected.model);
+                    $('#Div_ProductModel_Add').show();
+                    $('#Div_ProductModel_Add').dialog('open');
+                }
+            })
+
+            //确认添加
+            $('#ProductModel_Add_queren').click(function () {
+                var id = $('#Div_ProductModel_Add [name="model_id"]').val();
+                var model = $('#Div_ProductModel_Add [name="model"]').val();
+                var caozuo = $('#caozuo_ProductModel').val();
+                if (model.length <= 0) {
+                    alert("请输入模型名称");
+                    $('#Div_ProductModel_Add [name="model"]').focus();
+                    return;
+                }
+
+                $.ajax({
+                    url: '__APP__/MallProductModel/'+caozuo,
+                    data: {id: id, model: model},
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("恭喜，操作成功");
+                            $('#Div_ProductModel_Add').dialog('close');
+                            $('#MallProductModel').datagrid('reload');
+                            return;
+                        }
+                        if (msg == "error") {
+                            alert("抱歉，添加时出错，请重新添加");
+                            return;
+                        }
+                        if (msg == "have_model") {
+                            alert("模型已存在，请换一个模型名称重新添加");
+                            return;
+                        }
+                    }
+                })
+            })
+            
+            $('#ProductModel_Add_quxiao').click(function () {
+                $('#Div_ProductModel_Add').dialog('close');
+            })
+
+        })
+        function open_newtab(url, title) {
+            var IsHave = $('#right').tabs('exists', title);
+            if (IsHave) {
+                $('#right').tabs('select', title);
+                var tab = $('#right').tabs('getSelected');  // 获取选择的面板
+                //刷新面板
+                tab.panel('refresh', url);
+            }
+            else {
+                $('#right').tabs('add', {
+                    title: title,
+                    content: '<div class="easyui-panel" href="' + url + '" fit="true" border="false" ></div>',
+                    closable: true
+
+                });
+            }
+        }
+    </script>
+</body>
+</html>

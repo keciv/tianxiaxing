@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    
+    <div style="margin-top:20px">
+        <form id="form_Distribution_rule" method="post">
+            <input type="hidden" id="hidden_distribution_rule_id" value="{$distribution_rule.id}" />
+            <div style="margin-top: 15px;">
+                <label class="control-label" >
+                    <label style="width: 120px;display: block;float: left;right: 50px;
+line-height: 30px;padding-left: 20px;">等级名称：</label>
+                </label>
+                <input id="distribution_rule_name" type="text" value="{$distribution_rule.name}" style="margin: 15px;margin-bottom: 0px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <label class="control-label" >
+                    <label style="width: 120px;display: block;float: left;right: 50px;
+line-height: 30px;padding-left: 20px;">奖励：</label>
+                </label>
+                <input id="distribution_rule_ratio" type="text" value="{$distribution_rule.ratio}" style="margin: 15px;margin-bottom: 0px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <label class="control-label" >
+                    <label style="width: 120px;display: block;float: left;right: 50px;
+line-height: 30px;padding-left: 20px;">直推人数：</label>
+                </label>
+                <input id="distribution_rule_direct" type="text" value="{$distribution_rule.direct}" style="margin: 15px;margin-bottom: 0px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <label class="control-label" >
+                    <label style="width: 120px;display: block;float: left;right: 50px;
+line-height: 30px;padding-left: 20px;">间推人数：</label>
+                </label>
+                <input id="distribution_rule_indirect" type="text" value="{$distribution_rule.indirect}" style="margin: 15px;margin-bottom: 0px;">
+            </div>
+            <div style="margin: 2% 14%;">
+                <a id="save_Distribution_Rule" href="javascript:void(0)" class="easyui-linkbutton">保存</a> 
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        $('#distribution_rule_name').textbox({
+            width: 50,
+            height: 30
+        })
+        $('#distribution_rule_ratio').textbox({
+            width: 50,
+            height: 30
+        })
+        $('#distribution_rule_direct').textbox({
+            width: 50,
+            height: 30
+        })
+        $('#distribution_rule_indirect').textbox({
+            width: 50,
+            height: 30
+        })
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#save_Distribution_Rule').click(function () {
+                var id = $('#hidden_distribution_rule_id').val();
+                var name = $('#distribution_rule_name').textbox('getValue');
+                var ratio = $('#distribution_rule_ratio').textbox('getValue');
+                var direct = $('#distribution_rule_direct').textbox('getValue');
+                var indirect = $('#distribution_rule_indirect').textbox('getValue');
+                
+                $.ajax({
+                    url: '__APP__/DistributionRule/save',
+                    data: { id: id, name: name, ratio: ratio, direct: direct, indirect: indirect},
+                    type: 'post',
+                    success: function (msg) {
+                        if (msg == "ok") {
+                            alert("设置成功");
+                        }
+                        else {
+                            alert("设置失败，请重新设置");
+                        }
+
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

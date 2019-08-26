@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>个人信息</title>
+	<link rel="stylesheet" type="text/css" href="/public/phone/css/lpk.css" />
+	<link rel="stylesheet" type="text/css" href="/public/phone/lb/css/bootstrap.css" />
+	<link rel="stylesheet" href="/public/phone/layer/layui.css">
+	<link rel="stylesheet" type="text/css" href="/public/phone/css/reset.css" />
+	<script src="/public/phone/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/public/phone/lb/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/public/phone/layer/layer.js"></script>
+	<script src="/public/phone/js/rem.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('#drop_out').click(function(){
+				$.ajax({
+					url:'/app.php/login/drop_out',
+					data:{"id":"5"},
+					type:'post',
+					dataType:'json',
+					success:function(data){
+						if(data.code=="200")
+						{
+							window.location.href = "/login.html";
+						}
+					}
+				})
+			})
+		})
+	</script>
+</head>
+
+<body>
+	<header class="lpk_head clearfix">
+		<div class="fl left">
+			<a href="__APP__/MyCenter.html">
+				<font class="glyphicon glyphicon-menu-left"></font>
+			</a>
+		</div>
+		<div class="fl center">
+			个人信息
+		</div>
+		<div class="fr right">
+			<a href="javascript:;" id="drop_out">
+				<font class="xg">退出</font>
+			</a>
+		</div>
+	</header>
+	<section class="lpk_section">
+		<form action="" method="">
+			<div class="item clearfix item1">
+				<div class="fl left">
+					头像
+				</div>
+				<div class="fr right">
+
+					<input type="file" class="ajax-upload" id="sfz_1" style="display:none">
+					<img id="img" onclick="$('#sfz_1').click()" src="">
+
+				</div>
+			</div>
+			<div class="item clearfix">
+				<div class="fl left">
+					昵称
+				</div>
+				<div class="fr right">
+					<input type="text" name="nickname" id="nickname" value="" />
+				</div>
+			</div>
+			<div class="item clearfix">
+				<div class="fl left">
+					姓名
+				</div>
+				<div class="fr right">
+					<input type="text" name="card_owner" id="card_owner" value="" />
+				</div>
+			</div>
+			
+			<!-- ---- -->
+			<div class="item clearfix">
+				<div class="fl left">
+					手机
+				</div>
+				<div class="fr right">
+					<input type="text" name="phone" id="phone" value="" readonly="readonly" />
+				</div>
+			</div>
+			<div class="item clearfix">
+				<div class="fl left">
+					身份证
+				</div>
+				<div class="fr right">
+					<input type="text" name="id_card" id="id_card" value="" />
+				</div>
+			</div>
+			<div class="item clearfix">
+				<div class="fl left">
+					银行卡
+				</div>
+				<div class="fr right">
+					<input type="text" name="bank_card" id="bank_card" value="" />
+				</div>
+			</div>
+		</form>
+	</section>
+	<footer class="go_foot">
+		<span>保存</span>
+	</footer>
+	<div class="go_foot_bg"></div>
+	<script type="text/javascript">
+		
+		
+		$('.ajax-upload').on('change', function() { //当 input file 已经选中时触发js
+			var formData = new FormData(); //先实例化formdata
+			var file = this.files[0]; //获取文件名
+			var url = '/app.php/Upload/upload'; //接受处理本JS方法的路径
+			formData.append("type", "Headportrait"); //append方法用于向formdata中注入内容
+			formData.append("picture", file); 
+			$.ajax({
+				type: "post",
+				url: url,
+				//async:false,
+				contentType: false,
+				processData: false,
+				data: formData, 
+				dataType: 'json',
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function(data) {
+					if(data.code=="200"){
+						$('#img').attr('src',data.data[0])
+						layer.msg("上传成功");
+					}
+					else
+					{
+						layer.msg(data.code);
+						layer.msg(data.msg);
+					}
+				}
+			});
+		})
+		
+	</script>
+	<script type="text/javascript">
+		$('.lpk_head .right a font').bind('click', function() {
+// 				$('.lpk_section .item .right input').removeAttr('readonly')
+// 				$(this).text('保存')
+})
+		var member_id = "{$member_id}";
+		$(function() {
+			$.ajax({
+				type: "get",
+				url: "/app.php/MemberInfo/get_info",
+				data: {
+					member_id: member_id
+				},
+				dataType: 'json',
+				success: function(data) {
+					console.log(data);
+					if(data.code == "200") {
+						$('#nickname').val(data.data.nickname);
+						$('#card_owner').val(data.data.card_owner);
+						$('#phone').val(data.data.phone);
+						$('#id_card').val(data.data.id_card);
+						$('#bank_card').val(data.data.bank_card);
+						$('#img').attr('src', data.data.headportrait)
+					}
+					else if(data.code=="404")
+					{
+						layer.msg(data.msg,{time:2000},function(){
+							window.location.href = "/login.html";
+						});
+					}
+					else {
+						layer.msg(data.msg);
+					}
+				}
+			});
+		})
+
+		$('.go_foot').click(function() {
+			var nickname = $('#nickname').val();
+			var card_owner = $('#card_owner').val();
+			var id_card = $('#id_card').val();
+			var bank_card = $('#bank_card').val();
+			var headportrait = $('#img').attr('src')
+			
+			$.ajax({
+				type: "post",
+				url: "/app.php/MemberInfo/save",
+				dataType: 'json',
+				data: {
+					member_id: member_id,
+					nickname: nickname,
+					card_owner: card_owner,
+					id_card: id_card,
+					bank_card: bank_card,
+					headportrait: headportrait
+				},
+				success: function(data) {
+					if(data.code == "200") {
+						layer.msg("保存成功",{time:1500},function(){
+							location.reload();
+						});
+					}
+					else if(data.code=="404")
+					{
+						layer.msg(data.msg,{time:2000},function(){
+							window.location.href = "/login.html";
+						});
+					}
+					else {
+						layer.msg(data.msg);
+					}
+				}
+			});
+
+		})
+	</script>
+
+</body>
+
+</html>

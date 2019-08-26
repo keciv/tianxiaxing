@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'unsafe-inline' 'unsafe-eval' 'self'  *.jythjc.com kefu.easemob.com;img-src 'self' data:;font-src 'self' data:;report-uri /error/csp.php" />
+	<title>修改密码</title>
+	<link href="__ROOT__/public/phone/css/amazeui.min.css" rel="stylesheet" type="text/css" />
+	<link href="__ROOT__/public/phone/css/demo.css" rel="stylesheet" type="text/css" />
+	<link type="text/css" href="__ROOT__/public/phone/css/optstyle.css" rel="stylesheet" />
+	<link type="text/css" href="__ROOT__/public/phone/css/style.css" rel="stylesheet" />
+	<script type="text/javascript" src="__ROOT__/public/phone/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/phone/js/amazeui.min.js"></script>
+	<script type="text/javascript" src="__ROOT__/public/layer/layer.js"></script>
+  	<script type="text/javascript" src="__ROOT__/public/phone/js/mymall.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			Password.old_pwd = $('#old_password');
+			Password.new_pwd = $('#password');
+			Password.repeat_pwd = $('#passwordRepeat');
+			$('.xyb').on("click",Password.edit);
+		})
+	</script>
+</head>
+<body>
+	<!-- header -->
+	<include file="Public/header" />
+	<!-- 内容 -->
+	<div class="czdlmm">
+		<div class="shuruk">
+			<span>原密码：</span>
+			<input type="password" class="srk" id="old_password" placeholder="请输入原密码">
+		</div>
+		<div class="shuruk">
+			<span>设置密码：</span>
+			<input type="password" class="srk" id="password" placeholder="请设置新密码">
+		</div>
+		<div class="shuruk">
+			<span>确认密码：</span>
+			<input type="password" class="srk" id="passwordRepeat" placeholder="请再次输入密码">
+		</div>
+		<!-- <p class="beizhu">必须是6-20个英文字母、数字或符号（除空格），且字母、数字和标点符号至少包含两种</p> -->
+		<a class="xyb" href="javascript:void(0)">下一步</a>
+	</div>
+</body>
+</html>
