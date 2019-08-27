@@ -112,19 +112,25 @@
 		<footer class="lpk_foot">
 	<ul class="clearfix">
 		<li>
-			<a href="/index.php"><img src="/public/phone/img/foot11.png" /></a>
+			<a href="/index.html"><img src="/public/phone/img/foot11.png" /></a>
 		</li>
-		<li>
+		<!--<li>
 			<a href="/ProductSort.html"><img src="/public/phone/img/foot4.png" /></a>
-		</li>
+		</li>-->
 		<!--<li>
 			<a href="/Package.html"><img src="/public/phone/img/foot5.png" /></a>
 		</li>-->
 		<li>
 			<a href="/ShoppingCart.html"><img src="/public/phone/img/foot2.png" /></a>
 		</li>
-		<li>
+		
+		
+		<!--<li>
 			<a href="/MyCenter.html"><img src="/public/phone/img/foot3.png" /></a>
+		</li>-->
+		
+		<li>
+			<a href="/Order.html"><img src="/public/phone/img/foot2.png" /></a>
 		</li>
 	</ul>
 </footer>

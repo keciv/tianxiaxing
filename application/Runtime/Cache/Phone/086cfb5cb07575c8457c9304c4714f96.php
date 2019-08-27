@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
 <html>
 
 <head>
@@ -41,7 +41,7 @@
 <body>
 	<div class="zgc">
 	   	<div class="box">
-	        <img src="__ROOT__/public/phone/img/fenxt.png">
+	        <img src="/public/phone/img/fenxt.png">
 	    </div>
 		<div class="modal-backdrop"></div>
 	</div>
@@ -62,7 +62,7 @@
 				<input type="password" name="" id="passwordRepeat" value="" placeholder="确认密码" />
 			</div>
 			<div class="top">
-				<input type="text" name="" id="inviter" value="{$member.phone}" placeholder="邀请人" />
+				<input type="text" name="" id="inviter" value="<?php echo ($member["phone"]); ?>" placeholder="邀请人" />
 			</div>
 			<div class="bottom">
 				<input type="button" name="zc" id="zc" value="注册" />

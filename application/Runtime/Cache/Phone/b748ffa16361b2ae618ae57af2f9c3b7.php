@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -93,9 +93,6 @@
 		
 		<header class="lpk_head clearfix">
 			<div class="fl left">
-				<a href="__APP__/MyCenter.html">
-					<font class="glyphicon glyphicon-menu-left"></font>
-				</a>
 			</div>
 			<div class="fl center">
 				商城
@@ -191,7 +188,37 @@
 			</div>
 		</div>
 
-		<include file="Public/footer" />
+		<footer class="lpk_foot">
+	<ul class="clearfix">
+		<li>
+			<a href="/indexa.php"><img src="/public/phone/img/foot11.png" /></a>
+		</li>
+		<!--<li>
+			<a href="/ProductSort.html"><img src="/public/phone/img/foot4.png" /></a>
+		</li>-->
+		<!--<li>
+			<a href="/Package.html"><img src="/public/phone/img/foot5.png" /></a>
+		</li>-->
+		<li>
+			<a href="/ShoppingCart.html"><img src="/public/phone/img/foot2.png" /></a>
+		</li>
+		
+		
+		<!--<li>
+			<a href="/MyCenter.html"><img src="/public/phone/img/foot3.png" /></a>
+		</li>-->
+		
+		<li>
+			<a href="/Order.html"><img src="/public/phone/img/foot2.png" /></a>
+		</li>
+	</ul>
+</footer>
+<script src="/public/phone/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+	$('.lpk_foot ul li').eq(1).click(function() {
+		localStorage.clear();
+	})
+</script>
 		<div class="lpk_foot_bg"></div>
 		<script src="/public/phone/lb/js/swiper-3.4.2.jquery.min.js"></script>
 		<script>
@@ -204,7 +231,7 @@
 				get_banner();
 				get_new();
 			})
-			var member_type = "{$member_type}";
+			var member_type = "<?php echo ($member_type); ?>";
 			var myscroll = new iScroll("wrapper", {
 				onScrollMove: function() { //拉动时
 					//上拉加载
@@ -384,7 +411,7 @@
 									var row = data.data[i];
 									result += 	`
 									  <div class="swiper-slide">
-									  		 <a href="__APP__/NewShow_${row.id}.html">
+									  		 <a href="/NewShow_${row.id}.html">
 												<img src="${row.picture}" />
 											</a>
 									  </div>`;

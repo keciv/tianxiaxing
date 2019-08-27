@@ -11,6 +11,7 @@
     <script src="/public/phone/lb/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
     <script src="/public/phone/layer/layer.js"></script>
     <script src="/public/phone/js/rem.js" type="text/javascript" charset="utf-8"></script>
+   
     <script type="text/javascript">
         $(function(){
             $('#login').click(function(){
